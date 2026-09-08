@@ -1,0 +1,1 @@
+const n=[.22,1,.36,1],t={type:"spring",stiffness:500,damping:32,mass:.9},i={hidden:{opacity:0,y:20},show:{opacity:1,y:0,transition:{duration:.65,ease:n}}},o=(s=.07,a=0)=>({hidden:{},show:{transition:{staggerChildren:s,delayChildren:a}}});export{n as E,t as a,i as f,o as s};
