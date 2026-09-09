@@ -14,7 +14,7 @@ import { REFERRAL_CREDIT_CENTS, STAR_CREDIT_CENTS } from "@/lib/categories";
 import { CATEGORIES, formatCents } from "@/lib/categories";
 import { EASE, fadeUp, springSnappy, stagger } from "@/lib/motion";
 import { motion } from "framer-motion";
-import { type ReactNode, useState } from "react";
+import { type PointerEvent as ReactPointerEvent, type ReactNode, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useQuery } from "convex/react";
 import {
@@ -39,6 +39,14 @@ function faviconUrl(url: string | null): string | null {
   } catch {
     return null;
   }
+}
+
+/** Feed the .spotlight overlay with cursor position (see index.css). */
+function trackSpotlight(e: ReactPointerEvent<HTMLElement>) {
+  const el = e.currentTarget;
+  const r = el.getBoundingClientRect();
+  el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+  el.style.setProperty("--my", `${e.clientY - r.top}px`);
 }
 
 const DEMO_ROWS = [
@@ -195,13 +203,20 @@ function BoardsSection() {
               type="button"
               onClick={() => setGroup(g.id)}
               className={cn(
-                "rounded-full border px-3.5 py-1.5 text-[12px] font-medium transition-all",
+                "relative rounded-full border px-3.5 py-1.5 text-[12px] font-medium transition-colors",
                 group === g.id
-                  ? "border-primary bg-primary text-primary-foreground"
+                  ? "border-primary text-primary-foreground"
                   : "border-border/60 bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground",
               )}
             >
-              {g.label}
+              {group === g.id && (
+                <motion.span
+                  layoutId="landing-filter-pill"
+                  transition={springSnappy}
+                  className="absolute inset-0 rounded-full bg-primary"
+                />
+              )}
+              <span className="relative z-10">{g.label}</span>
             </button>
           ))}
         </div>
@@ -455,7 +470,7 @@ export default function Landing() {
       </header>
 
       {/* Hero */}
-      <section className="bg-hero-printed relative overflow-hidden border-b border-border/60">
+      <section className="bg-hero-printed grain relative overflow-hidden border-b border-border/60">
         <CompassRose className="pointer-events-none absolute -left-24 -top-24 size-80 text-foreground opacity-[0.07]" />
         <Particles count={20} />
         <WireframeGlobe className="-right-32 top-1/2 -translate-y-1/2 lg:right-[5%]" />
@@ -507,8 +522,11 @@ export default function Landing() {
               variants={fadeUp}
               className="mt-3 max-w-lg text-sm text-muted-foreground/80"
             >
-              Star what you love free. Boost your own with real dollars — or
-              pay to down-rank a rival. Every position is backed by receipts.
+              Star what you love free. Boost your own with real dollars — or{" "}
+              <span className="text-accent-orange">
+                pay to down-rank a rival
+              </span>
+              . Every position is backed by receipts.
             </motion.p>
             <motion.div variants={fadeUp} className="mt-7 flex flex-wrap items-center gap-3">
               <Magnetic>
@@ -520,7 +538,7 @@ export default function Landing() {
                 </Button>
               </Magnetic>
               <Magnetic strength={0.2}>
-                <Button asChild size="lg" variant="outline" className="rounded-full">
+                <Button asChild size="lg" variant="metal" className="rounded-full">
                   <Link to="/auth?returnTo=%2Fdashboard">List your product</Link>
                 </Button>
               </Magnetic>
@@ -543,7 +561,7 @@ export default function Landing() {
           </motion.div>
 
           {/* Mock leaderboard card */}
-          <TiltCard className="relative">
+          <TiltCard className="relative hairline">
             <motion.div
               initial={{ opacity: 0, y: 24, rotate: 1.5 }}
               animate={{ opacity: 1, y: 0, rotate: 0 }}
@@ -667,6 +685,7 @@ export default function Landing() {
 
       {/* Live money stats — the whole pot, in public */}
       <section className="border-b border-border/60 bg-card/60">
+        <div aria-hidden className="beam-line" />
         <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-3 px-4 py-10 sm:grid-cols-2 lg:grid-cols-4">
           {potStats.map((s) => (
             <motion.div
@@ -675,7 +694,8 @@ export default function Landing() {
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
-              className="group rounded-xl border border-border/60 bg-card p-5 transition-all hover:border-primary/40 hover:shadow-card-hover"
+              onPointerMove={trackSpotlight}
+              className="spotlight group rounded-xl border border-border/60 bg-card p-5 transition-all hover:border-primary/40 hover:shadow-card-hover"
             >
               <div className="flex items-center justify-between">
                 <span className="font-label text-[10px] uppercase tracking-wide text-muted-foreground">
@@ -756,13 +776,21 @@ export default function Landing() {
               key={f.title}
               variants={fadeUp}
               whileHover={{ y: -5, transition: springSnappy }}
-              className="group rounded-xl border border-border/70 bg-card p-6 transition-all hover:border-primary/30 hover:shadow-card-hover glow-hover"
+              onPointerMove={trackSpotlight}
+              className="spotlight group rounded-xl border border-border/70 bg-card p-6 transition-all hover:border-primary/30 hover:shadow-card-hover glow-hover"
             >
               <div className="flex items-center justify-between">
                 <span className="grid size-11 place-items-center overflow-hidden rounded-full border border-border/60 bg-primary/8 text-xl leading-none transition-colors group-hover:border-primary/30 group-hover:bg-primary/15">
                   {f.emoji}
                 </span>
-                <span className="font-label rounded-full border border-border/60 px-2 py-0.5 text-[9px] uppercase tracking-wide text-muted-foreground/70">
+                <span
+                  className={cn(
+                    "font-label rounded-full border px-2 py-0.5 text-[9px] uppercase tracking-wide",
+                    f.kicker === "Paid"
+                      ? "border-[color-mix(in_oklab,var(--flame)_35%,transparent)] bg-[color-mix(in_oklab,var(--flame)_8%,transparent)] text-accent-orange"
+                      : "border-border/60 text-muted-foreground/70",
+                  )}
+                >
                   {f.kicker}
                 </span>
               </div>
@@ -848,7 +876,8 @@ export default function Landing() {
                   key={r.step}
                   variants={fadeUp}
                   whileHover={{ y: -4, transition: springSnappy }}
-                  className="group rounded-xl border border-border/70 bg-card p-5 transition-all hover:border-primary/30 hover:shadow-card-hover glow-hover"
+                  onPointerMove={trackSpotlight}
+                  className="spotlight group rounded-xl border border-border/70 bg-card p-5 transition-all hover:border-primary/30 hover:shadow-card-hover glow-hover"
                 >
                   <div className="flex items-center gap-3">
                     <span className="font-mono grid size-9 shrink-0 place-items-center rounded-full border border-border/60 bg-secondary/40 text-sm font-bold tabular-nums text-primary transition-colors group-hover:border-primary/40 group-hover:bg-primary/10">
@@ -929,7 +958,8 @@ export default function Landing() {
                 <motion.div key={s.id} variants={fadeUp} whileHover={{ y: -3, transition: springSnappy }}>
                   <Link
                     to={`/board?category=${s.id}`}
-                    className="group flex items-center gap-3 rounded-xl border border-border/70 bg-card p-4 transition-all hover:border-primary/50 hover:shadow-card-hover glow-hover"
+                    onPointerMove={trackSpotlight}
+                    className="spotlight group flex items-center gap-3 rounded-xl border border-border/70 bg-card p-4 transition-all hover:border-primary/50 hover:shadow-card-hover glow-hover"
                   >
                     <span className="inline-flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/8 text-sm leading-none">{s.emoji}</span>
                     <span className="text-[13px] font-semibold">{s.label}</span>
@@ -1076,8 +1106,9 @@ export default function Landing() {
             }
             body={
               <p className="mx-auto max-w-md text-muted-foreground">
-                $5 to list. Boosts from $5. #1 only means something because
-                someone paid for it.
+                $5 to list. Boosts from $5.{" "}
+                <span className="text-accent-orange font-medium">#1</span> only
+                means something because someone paid for it.
               </p>
             }
             actions={

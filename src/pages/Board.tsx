@@ -342,24 +342,40 @@ export default function Board() {
             <button
               type="button"
               aria-active={mode === "all"}
+              className="relative"
               onClick={() => {
                 const p = new URLSearchParams(params);
                 p.delete("range");
                 setParams(p);
               }}
             >
-              All time
+              {mode === "all" && (
+                <motion.span
+                  layoutId="board-range-pill"
+                  transition={springSnappy}
+                  className="segmented-pill"
+                />
+              )}
+              <span className="relative z-10">All time</span>
             </button>
             <button
               type="button"
               aria-active={mode === "today"}
+              className="relative"
               onClick={() => {
                 const p = new URLSearchParams(params);
                 p.set("range", "today");
                 setParams(p);
               }}
             >
-              Today
+              {mode === "today" && (
+                <motion.span
+                  layoutId="board-range-pill"
+                  transition={springSnappy}
+                  className="segmented-pill"
+                />
+              )}
+              <span className="relative z-10">Today</span>
             </button>
           </div>
         </div>

@@ -23,11 +23,8 @@ const Rules = lazy(() => import("./pages/Rules.tsx"));
 const Jobs = lazy(() => import("./pages/Jobs.tsx"));
 const News = lazy(() => import("./pages/News.tsx"));
 const Credits = lazy(() => import("./pages/Credits.tsx"));
-const Ai = lazy(() => import("./pages/Ai.tsx"));
 const Network = lazy(() => import("./pages/Network.tsx"));
 const NetworkProfile = lazy(() => import("./pages/NetworkProfile.tsx"));
-// DEV-ONLY: palette lab — remove after the theme decision.
-const PaletteLab = lazy(() => import("./pages/PaletteLab.tsx"));
 
 // Simple loading fallback for route transitions
 function RouteLoading() {
@@ -116,8 +113,6 @@ function AnimatedRoutes() {
               element={<AuthPage redirectAfterAuth="/dashboard" />}
             />
             <Route path="/board" element={<Board />} />
-            {/* DEV-ONLY: palette lab — remove after the theme decision. */}
-            <Route path="/palette" element={<PaletteLab />} />
             <Route path="/rules" element={<Rules />} />
             <Route path="/jobs" element={<Jobs />} />
             <Route path="/news" element={<News />} />
@@ -126,14 +121,6 @@ function AnimatedRoutes() {
               element={
                 <RequireAuth>
                   <Credits />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/ai"
-              element={
-                <RequireAuth>
-                  <Ai />
                 </RequireAuth>
               }
             />
@@ -202,6 +189,35 @@ function RouteSyncer() {
   return null;
 }
 
+/** Scrolls to the element matching the URL hash (e.g. /news#newsletter).
+ *  SPA navigation doesn't auto-scroll to hashes, so we do it manually —
+ *  retrying briefly to wait for the lazy route chunk + enter animation. */
+function HashScroller() {
+  const location = useLocation();
+  useEffect(() => {
+    if (!location.hash) return;
+    const id = decodeURIComponent(location.hash.slice(1));
+    let timer: number | undefined;
+    let cancelled = false;
+    const tryScroll = (attempt: number) => {
+      if (cancelled) return;
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else if (attempt < 20) {
+        timer = window.setTimeout(() => tryScroll(attempt + 1), 100);
+      }
+    };
+    // Give the lazy route + framer-motion enter transition a beat to settle.
+    timer = window.setTimeout(() => tryScroll(0), 350);
+    return () => {
+      cancelled = true;
+      if (timer) window.clearTimeout(timer);
+    };
+  }, [location.pathname, location.hash]);
+  return null;
+}
+
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -214,6 +230,7 @@ createRoot(document.getElementById("root")!).render(
           <BrowserRouter>
             <ScrollProgress />
             <RouteSyncer />
+            <HashScroller />
             <AnimatedRoutes />
           </BrowserRouter>
         </MotionConfig>

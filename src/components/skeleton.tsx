@@ -104,3 +104,34 @@ export function PulseDot({ className }: { className?: string }) {
     </span>
   );
 }
+
+/** News row skeleton — mimics a story row (source line + title + summary). */
+export function NewsRowSkeleton() {
+  return (
+    <div className="flex items-start gap-4 rounded-xl border border-border/40 bg-card/60 p-4">
+      <div className="min-w-0 flex-1 space-y-2">
+        <Shimmer className="h-3 w-40" />
+        <Shimmer className="h-4 w-3/4" />
+        <Shimmer className="h-3 w-2/3" />
+      </div>
+      <Shimmer className="size-20 shrink-0 rounded-lg" />
+    </div>
+  );
+}
+
+/** News loading state — six staggered story rows. */
+export function NewsSkeleton({ rows = 6 }: { rows?: number }) {
+  return (
+    <div className="space-y-3">
+      {Array.from({ length: rows }).map((_, i) => (
+        <div
+          key={i}
+          style={{ animationDelay: `${i * 100}ms` }}
+          className="animate-pulse"
+        >
+          <NewsRowSkeleton />
+        </div>
+      ))}
+    </div>
+  );
+}

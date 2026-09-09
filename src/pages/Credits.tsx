@@ -227,7 +227,7 @@ export default function Credits() {
                       <span className="font-medium text-emerald-400">+300 / +500 / +1000</span>
                     </li>
                     <li className="flex justify-between gap-2">
-                      <span>AI usage refunds &amp; future credit packs</span>
+                      <span>Future credit packs</span>
                       <span className="font-medium text-emerald-400">varies</span>
                     </li>
                   </ul>

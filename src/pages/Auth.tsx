@@ -16,9 +16,18 @@ import {
 
 import { useAuth } from "@/hooks/use-auth";
 import logo from "@/assets/logo.svg";
-import { ArrowRight, Loader2, Mail, UserX } from "lucide-react";
+import { CompassRose } from "@/components/compass-rose";
+import {
+  ArrowRight,
+  Gavel,
+  Loader2,
+  Mail,
+  Star,
+  Trophy,
+  UserX,
+} from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 
 interface AuthProps {
   redirectAfterAuth?: string;
@@ -80,8 +89,6 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
       const formData = new FormData(event.currentTarget);
       await signIn("email-otp", formData);
 
-      console.log("signed in");
-
       navigate(redirect);
     } catch (error) {
       console.error("OTP verification error:", error);
@@ -97,9 +104,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
     setIsLoading(true);
     setError(null);
     try {
-      console.log("Attempting anonymous sign in...");
       await signIn("anonymous");
-      console.log("Anonymous sign in successful");
       navigate(redirect);
     } catch (error) {
       console.error("Guest login error:", error);
@@ -110,95 +115,166 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="grid min-h-screen lg:grid-cols-[1.05fr_1fr]">
+      {/* Brand panel — editorial showcase (desktop) */}
+      <aside className="bg-ink grain relative hidden flex-col justify-between overflow-hidden p-10 lg:flex">
+        <CompassRose className="pointer-events-none absolute -right-20 -top-20 size-96 text-background opacity-[0.06]" />
+        <Link to="/" className="relative z-10 flex items-center gap-2.5">
+          <img src={logo} alt="Atlas" className="size-9 rounded-lg" />
+          <span className="font-display text-2xl font-bold tracking-tight text-background">
+            Atlas<span className="text-primary">.</span>
+          </span>
+        </Link>
+        <div className="relative z-10 max-w-lg">
+          <p className="font-label mb-4 flex items-center gap-2 text-xs font-medium text-primary">
+            <span className="live-dot" />
+            The board is live
+          </p>
+          <h1 className="type-display-lg text-background">
+            Claim your{" "}
+            <span className="text-accent-orange italic">spot.</span>
+          </h1>
+          <p className="mt-5 max-w-md text-sm leading-relaxed text-background/70 sm:text-base">
+            Rank products, profiles, and projects with real money at stake.
+            Stars are free — boosts and sabotage are forever.
+          </p>
+          <ul className="mt-9 space-y-4">
+            {[
+              {
+                icon: <Trophy className="size-4" />,
+                title: "Earn rank with receipts",
+                body: "Every position is backed by real dollars — no vanity metrics.",
+              },
+              {
+                icon: <Star className="size-4" />,
+                title: "Star favorites for free",
+                body: "The crowd's signal, counted in money terms. $0.10 credit each.",
+              },
+              {
+                icon: <Gavel className="size-4" />,
+                title: "Outbid rivals live",
+                body: "Boosts climb, sabotage drags down. Ranks move in real time.",
+              },
+            ].map((f) => (
+              <li key={f.title} className="flex items-start gap-3">
+                <span className="grid size-9 shrink-0 place-items-center rounded-full border border-background/15 bg-background/5 text-primary">
+                  {f.icon}
+                </span>
+                <div>
+                  <p className="text-sm font-semibold text-background">
+                    {f.title}
+                  </p>
+                  <p className="mt-0.5 text-xs leading-relaxed text-background/60">
+                    {f.body}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <p className="relative z-10 font-label text-[10px] uppercase tracking-wide text-background/40">
+          Passwordless · one-time email code
+        </p>
+      </aside>
 
-      
-      {/* Auth Content */}
-      <div className="flex-1 flex items-center justify-center">
-        <div className="flex items-center justify-center h-full flex-col">
-        <Card className="min-w-[350px] pb-0 border shadow-md">
+      {/* Auth panel */}
+      <main className="bg-mesh-gradient flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-md">
+          {/* Mobile brand header */}
+          <Link
+            to="/"
+            className="mb-8 flex items-center justify-center gap-2.5 lg:hidden"
+          >
+            <img src={logo} alt="Atlas" className="size-9 rounded-lg" />
+            <span className="font-display text-2xl font-bold tracking-tight">
+              Atlas<span className="text-primary">.</span>
+            </span>
+          </Link>
+          <Card className="hairline min-w-[350px] rounded-xl pb-0 shadow-elevated">
           {step === "signIn" ? (
             <>
               <CardHeader className="text-center">
-              <div className="flex justify-center">
-                    <img
-                      src={logo}
-                      alt="Lock Icon"
-                      width={64}
-                      height={64}
-                      className="rounded-lg mb-4 mt-4 cursor-pointer"
-                      onClick={() => navigate("/")}
-                    />
-                  </div>
-                <CardTitle className="text-xl">Get Started</CardTitle>
+                <CardTitle className="font-display text-2xl">
+                  Get started
+                </CardTitle>
                 <CardDescription>
-                  Enter your email to log in or sign up
+                  One code, no password — log in or sign up with your email.
                 </CardDescription>
               </CardHeader>
               <form onSubmit={handleEmailSubmit}>
                 <CardContent>
-                  
-                  <div className="relative flex items-center gap-2">
-                    <div className="relative flex-1">
-                      <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        name="email"
-                        placeholder="name@example.com"
-                        type="email"
-                        className="pl-9"
-                        disabled={isLoading}
-                        required
-                      />
-                    </div>
-                    <Button
-                      type="submit"
-                      variant="outline"
-                      size="icon"
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      name="email"
+                      placeholder="name@example.com"
+                      type="email"
+                      className="pl-9"
+                      autoComplete="email"
                       disabled={isLoading}
-                    >
-                      {isLoading ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      ) : (
-                        <ArrowRight className="h-4 w-4" />
-                      )}
-                    </Button>
+                      required
+                    />
                   </div>
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="sheen-on-hover mt-3 w-full"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="size-4 animate-spin" />
+                        Sending code…
+                      </>
+                    ) : (
+                      <>
+                        Continue with email
+                        <ArrowRight className="size-4" />
+                      </>
+                    )}
+                  </Button>
                   {error && (
                     <p className="mt-2 text-sm text-red-500">{error}</p>
                   )}
-                  
-                  <div className="mt-4">
+
+                  <div className="mt-6">
                     <div className="relative">
                       <div className="absolute inset-0 flex items-center">
                         <span className="w-full border-t" />
                       </div>
-                      <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-background px-2 text-muted-foreground">
-                          Or
+                      <div className="relative flex justify-center">
+                        <span className="font-label bg-background px-2 text-[10px] text-muted-foreground">
+                          or
                         </span>
                       </div>
                     </div>
-                    
+
                     <Button
                       type="button"
-                      variant="outline"
-                      className="w-full mt-4"
+                      variant="metal"
+                      className="mt-4 w-full"
                       onClick={handleGuestLogin}
                       disabled={isLoading}
                     >
-                      <UserX className="mr-2 h-4 w-4" />
-                      Continue as Guest
+                      <UserX className="size-4" />
+                      Continue as guest
                     </Button>
+                    <p className="mt-3 text-center text-xs text-muted-foreground">
+                      Look around first — you can list once you sign in.
+                    </p>
                   </div>
                 </CardContent>
               </form>
             </>
           ) : (
             <>
-              <CardHeader className="text-center mt-4">
-                <CardTitle>Check your email</CardTitle>
+              <CardHeader className="mt-4 text-center">
+                <CardTitle className="font-display text-2xl">
+                  Check your inbox
+                </CardTitle>
                 <CardDescription>
-                  We've sent a code to {step.email}
+                  We sent a 6-digit code to{" "}
+                  <span className="font-mono text-foreground">{step.email}</span>
                 </CardDescription>
               </CardHeader>
               <form onSubmit={handleOtpSubmit}>
@@ -277,20 +353,18 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
             </>
           )}
 
-          <div className="py-4 px-6 text-xs text-center text-muted-foreground bg-muted border-t rounded-b-lg">
-            Secured by{" "}
-            <a
-              href="https://freebuff.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-primary transition-colors"
-            >
-              freebuff.com
-            </a>
+          <div className="rounded-b-lg border-t bg-muted/60 px-6 py-3.5 text-center text-xs text-muted-foreground">
+            Passwordless & private — we email a one-time code, never share your
+            address.
           </div>
         </Card>
+          <p className="font-label mt-6 text-center text-[10px] uppercase tracking-wide text-muted-foreground/60">
+            <Link to="/" className="transition-colors hover:text-foreground">
+              ← Back to the front page
+            </Link>
+          </p>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

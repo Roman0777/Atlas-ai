@@ -233,38 +233,6 @@ const schema = defineSchema(
       streak: v.number(),
     }).index("by_user", ["userId"]),
 
-    // Every AI call (model or agent) with its credit accounting.
-    aiRuns: defineTable({
-      userId: v.id("users"),
-      model: v.string(), // OpenRouter model slug
-      agentSlug: v.optional(v.string()), // set when run via an agent
-      prompt: v.string(),
-      response: v.optional(v.string()),
-      tokensIn: v.number(),
-      tokensOut: v.number(),
-      creditsCharged: v.number(), // hold taken before the call
-      creditsRefunded: v.optional(v.number()), // over-estimate returned
-      latencyMs: v.number(),
-      createdAt: v.number(),
-    })
-      .index("by_user_time", ["userId", "createdAt"])
-      .index("by_agent", ["agentSlug"]),
-
-    // Cached OpenRouter model catalog (single row, key = "global").
-    aiModelsCache: defineTable({
-      key: v.string(),
-      fetchedAt: v.number(),
-      models: v.array(
-        v.object({
-          id: v.string(),
-          name: v.optional(v.string()),
-          pricingInPerM: v.number(), // USD per 1M prompt tokens
-          pricingOutPerM: v.number(), // USD per 1M completion tokens
-          contextLength: v.optional(v.number()),
-        }),
-      ),
-    }).index("by_key", ["key"]),
-
     // Deal Room: investor profiles (VC / angel / incubator / accelerator).
     investorProfiles: defineTable({
       userId: v.id("users"),

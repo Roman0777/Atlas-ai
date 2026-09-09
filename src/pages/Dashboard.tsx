@@ -84,7 +84,7 @@ export default function Dashboard() {
               <CardContent className="flex flex-col items-center gap-3 p-10 text-center">
                 <span className="text-4xl">🚀</span>
                 <p className="max-w-sm text-sm text-muted-foreground">
-                  You haven't listed anything yet. Add your AI tool, SaaS, repo
+                  You haven't listed anything yet. Add your SaaS, repo
                   or token — then outbid everyone for #1.
                 </p>
                 <Button variant="outline" onClick={() => setSubmitOpen(true)}>

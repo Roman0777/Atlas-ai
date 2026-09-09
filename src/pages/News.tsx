@@ -7,7 +7,7 @@ import { EASE, fadeUp, stagger } from "@/lib/motion";
 import { getCategory } from "@/lib/categories";
 import { cn } from "@/lib/utils";
 import { useMutation, useQuery, useAction } from "convex/react";
-import { motion } from "framer-motion";
+import { motion, useSpring, useTransform } from "framer-motion";
 import {
   ArrowRight,
   CheckCircle2,
@@ -24,6 +24,7 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router";
 import { toast } from "sonner";
+import { NewsSkeleton } from "@/components/skeleton";
 
 function timeAgo(ts: number): string {
   const s = Math.max(1, Math.floor((Date.now() - ts) / 1000));
@@ -34,6 +35,16 @@ function timeAgo(ts: number): string {
   if (h < 24) return `${h}h ago`;
   const d = Math.floor(h / 24);
   return `${d}d ago`;
+}
+
+/** Integer value that glides to its target — stats feel live, not static. */
+function AnimatedCount({ value }: { value: number }) {
+  const spring = useSpring(value, { stiffness: 120, damping: 22 });
+  const text = useTransform(spring, (v) => Math.round(v).toLocaleString());
+  useEffect(() => {
+    spring.set(value);
+  }, [spring, value]);
+  return <motion.span>{text}</motion.span>;
 }
 
 export default function News() {
@@ -175,7 +186,7 @@ export default function News() {
           <div className="mt-6 flex flex-wrap gap-2">
             <Badge variant="secondary" className="gap-1.5">
               <Newspaper className="size-3" />
-              {(stats?.total ?? 0).toLocaleString()} stories
+              <AnimatedCount value={stats?.total ?? 0} /> stories
             </Badge>
             <Badge variant="secondary" className="gap-1.5">
               <Rss className="size-3" />
@@ -184,7 +195,7 @@ export default function News() {
             {typeof subscriberCount === "number" && (
               <Badge variant="secondary" className="gap-1.5">
                 <Mail className="size-3" />
-                {subscriberCount.toLocaleString()} subscribers
+                <AnimatedCount value={subscriberCount} /> subscribers
               </Badge>
             )}
             {lastSync && (
@@ -278,14 +289,7 @@ export default function News() {
 
         {/* Story list */}
         {filtered === undefined ? (
-          <div className="space-y-3">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div
-                key={i}
-                className="h-24 animate-pulse rounded-xl border border-border/40 bg-card/60"
-              />
-            ))}
-          </div>
+          <NewsSkeleton rows={6} />
         ) : filtered.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border/60 p-12 text-center">
             <Globe className="mx-auto size-8 text-muted-foreground" />
@@ -371,7 +375,10 @@ export default function News() {
       </main>
 
       {/* Newsletter sign-up */}
-      <section className="border-t border-border/60 bg-card/40">
+      <section
+        id="newsletter"
+        className="scroll-mt-20 border-t border-border/60 bg-card/40"
+      >
         <div className="mx-auto max-w-2xl px-4 py-16 text-center">
           <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-primary/10">
             <Mail className="size-6 text-primary" />

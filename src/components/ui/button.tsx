@@ -20,6 +20,8 @@ const buttonVariants = cva(
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
         sheen: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm sheen-on-hover",
+        metal:
+          "border border-border/60 bg-gradient-to-b from-card via-card to-secondary text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_1px_2px_oklch(0.25_0.04_175/0.08)] hover:border-primary/40 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_4px_12px_-2px_oklch(0.25_0.04_175/0.12)] dark:shadow-[inset_0_1px_0_rgba(220,231,222,0.1),0_1px_2px_oklch(0.05_0.02_175/0.4)] dark:hover:shadow-[inset_0_1px_0_rgba(220,231,222,0.1),0_4px_12px_-2px_oklch(0.05_0.02_175/0.5)]",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
