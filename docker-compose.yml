@@ -1,0 +1,45 @@
+services:
+  backend:
+    # Pinned to a known-good tag; bump deliberately when upgrading.
+    image: ghcr.io/get-convex/convex-backend:latest
+    container_name: atlas-convex-backend
+    stop_grace_period: 10s
+    stop_signal: SIGINT
+    restart: unless-stopped
+    ports:
+      # Vly dev backend already owns 3210/3211 — prod uses 3212/3213.
+      - "3212:3210"
+      - "3213:3211"
+    volumes:
+      - atlas-convex-data:/convex/data
+    environment:
+      - APPLICATION_MAX_CONCURRENT_MUTATIONS=16
+      - APPLICATION_MAX_CONCURRENT_NODE_ACTIONS=16
+      - APPLICATION_MAX_CONCURRENT_QUERIES=16
+      - APPLICATION_MAX_CONCURRENT_V8_ACTIONS=16
+      - CONVEX_CLOUD_ORIGIN=http://127.0.0.1:3212
+      - CONVEX_SITE_ORIGIN=http://127.0.0.1:3213
+      - DISABLE_BEACON=1
+      - DISABLE_METRICS_ENDPOINT=true
+      - RUST_LOG=info
+    healthcheck:
+      test: curl -f http://localhost:3210/version
+      interval: 5s
+      start_period: 10s
+
+  dashboard:
+    image: ghcr.io/get-convex/convex-dashboard:latest
+    container_name: atlas-convex-dashboard
+    stop_grace_period: 10s
+    stop_signal: SIGINT
+    restart: unless-stopped
+    ports:
+      - "6792:6791"
+    environment:
+      - NEXT_PUBLIC_DEPLOYMENT_URL=http://127.0.0.1:3212
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  atlas-convex-data:

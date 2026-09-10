@@ -7,6 +7,7 @@ import { SiteHeader } from "@/components/site-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { CategoryIcon } from "@/components/category-icon";
 import { api } from "@/convex/_generated/api";
 import { useAuth } from "@/hooks/use-auth";
 import { formatCents, getCategory } from "@/lib/categories";
@@ -48,13 +49,13 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background">
       <SiteHeader active="dashboard" />
 
-      <main className="mx-auto w-full max-w-5xl px-5 pt-20 pb-16">
+      <main className="mx-auto w-full max-w-5xl px-5 py-10">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="font-label text-xs text-muted-foreground/75">
+            <p className="eyebrow">
               Founder workspace
             </p>
-            <h1 className="type-display mt-1">
+            <h1 className="type-display mt-2">
               Welcome{user?.name ? `, ${user.name}` : ""}
             </h1>
           </div>
@@ -82,12 +83,12 @@ export default function Dashboard() {
               ))}
             </div>
           ) : mine.length === 0 ? (
-            <Card className="mt-4 border-dashed rounded-2xl">
-              <CardContent className="flex flex-col items-center gap-4 p-12 text-center">
-                <span className="grid size-16 place-items-center rounded-full bg-primary/8 text-primary">
-                  <Rocket className="size-7" />
+            <Card className="mt-3 border-dashed shadow-none">
+              <CardContent className="flex flex-col items-center gap-4 p-10 text-center">
+                <span className="grid size-14 place-items-center rounded-2xl bg-primary/10 text-primary">
+                  <Rocket className="size-6" />
                 </span>
-                <p className="max-w-sm text-sm text-muted-foreground/60">
+                <p className="max-w-sm text-[15px] leading-relaxed text-muted-foreground">
                   You haven't listed anything yet. Add your SaaS, repo
                   or token — then outbid everyone for #1.
                 </p>
@@ -123,8 +124,8 @@ export default function Dashboard() {
                             <ExternalLink className="size-3.5 opacity-50" />
                           </a>
                           {getCategory(l.category) && (
-                            <Badge variant="secondary" className="text-[11px] rounded-full">
-                              {getCategory(l.category)!.emoji}{" "}
+                            <Badge variant="secondary" className="gap-1 text-[11px] rounded-full">
+                              <CategoryIcon category={l.category} className="size-3" />
                               {getCategory(l.category)!.label}
                             </Badge>
                           )}

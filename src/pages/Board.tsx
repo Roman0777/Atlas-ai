@@ -309,18 +309,19 @@ export default function Board() {
       <SiteHeader active="board" />
 
       {/* Hero strip */}
-      <section className="border-b border-border/20 bg-ledger">
-        <div className="mx-auto w-full max-w-6xl px-5 pt-20 pb-10">
-          <h1 className="type-display-lg">
+      <section className="border-b border-border/50 bg-ledger grain">
+        <div className="mx-auto w-full max-w-6xl px-5 py-12 sm:py-14">
+          <p className="eyebrow">Live leaderboards</p>
+          <h1 className="type-display mt-3">
             Top leaders. Be the next
             <span className="text-accent-orange"> to claim #1</span>.
           </h1>
-          <p className="mt-3 max-w-xl text-base text-muted-foreground/60">
+          <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground">
             Star what you love for free. Boost your own product with real
             dollars — or pay to drag a rival down. Ranks move live.
           </p>
           {stats && (
-            <div className="mt-6 grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-4">
+            <div className="mt-8 grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-4">
               <StatCard icon={<TrendingUp className="size-4" />} label="Boosted" value={stats.potCents} format="cents" />
               <StatCard icon={<Flame className="size-4" />} label="Sabotage paid" value={stats.sabotageCents} format="cents" />
               <StatCard icon={<HandCoins className="size-4" />} label="Paid moves" value={stats.bidCount} />
@@ -332,7 +333,7 @@ export default function Board() {
 
       <main className="mx-auto w-full max-w-6xl px-5 py-10">
         {/* Search + Range toggle */}
-        <div className="mb-4 flex flex-wrap items-center gap-3">
+        <div className="mb-5 flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px] max-w-sm">
             <input
               type="text"
@@ -422,7 +423,7 @@ export default function Board() {
 
         <div className="grid gap-8 lg:grid-cols-[1fr_300px]">
           {/* Rankings */}
-          <div className="overflow-hidden rounded-2xl border border-border/30 bg-card/40 backdrop-blur-sm">
+          <div className="overflow-hidden rounded-2xl border border-border/50 card-premium shadow-apple">
             {!board ? (
               <BoardSkeleton />
             ) : (filteredBoard?.length ?? 0) === 0 ? (
@@ -453,8 +454,8 @@ export default function Board() {
                       transition: { type: "spring", stiffness: 420, damping: 28 },
                     }}
                     className={cn(
-                      "flex items-center gap-3 px-5 py-4 transition-colors hover:bg-accent/30",
-                      listing.rank <= 3 && "bg-primary/[0.03]",
+                      "flex items-center gap-3 p-4 transition-[background-color,box-shadow] duration-200 hover:bg-accent/50",
+                      listing.rank <= 3 && "bg-primary/[0.04]",
                       listing.rank === 1 && "rank-lead",
                       listing.featured &&
                       listing.featuredUntil &&
@@ -812,7 +813,7 @@ function SpotlightCard({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      className="mb-6 flex flex-col gap-3 rounded-xl border border-primary/30 bg-accent/40 p-4 shadow-lg shadow-primary/5 transition-shadow hover:shadow-xl hover:shadow-primary/10 sm:flex-row sm:items-center"
+      className="mb-6 flex flex-col gap-4 rounded-2xl border border-primary/30 bg-accent/40 p-5 shadow-apple transition-[box-shadow] duration-300 hover:shadow-apple-hover sm:flex-row sm:items-center"
     >
       <div className="min-w-0 flex-1">
         <p className="font-label flex items-center gap-2 text-[11px] font-medium text-primary">
@@ -877,17 +878,17 @@ function TabButton({
       type="button"
       onClick={onClick}
       className={cn(
-        "relative shrink-0 whitespace-nowrap rounded-full border px-4 py-2 text-[13px] font-medium transition-colors",
+        "relative shrink-0 whitespace-nowrap rounded-full border px-4 py-2 text-[13px] font-semibold tracking-tight outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         active
-          ? "border-primary"
-          : "border-border/70 bg-card text-foreground/80 hover:bg-accent",
+          ? "border-transparent"
+          : "border-border/60 bg-card text-foreground/80 shadow-apple hover:border-primary/40 hover:text-foreground",
       )}
     >
       {active && (
         <motion.span
           layoutId="board-tab-pill"
           transition={springSnappy}
-          className="absolute inset-0 rounded-full bg-primary"
+          className="absolute inset-0 rounded-full bg-primary shadow-[0_2px_10px_-3px_var(--primary)]"
         />
       )}
       <span className={cn("relative z-10", active && "text-primary-foreground")}>

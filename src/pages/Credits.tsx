@@ -93,7 +93,7 @@ export default function Credits() {
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader active="credits" />
-      <main className="mx-auto w-full max-w-6xl px-5 pt-20 pb-10">
+      <main className="mx-auto w-full max-w-6xl px-5 py-10">
         {authLoading || wallet === undefined ? (
           <div className="flex min-h-[40vh] items-center justify-center">
             <Loader2 className="size-6 animate-spin text-muted-foreground" />
@@ -105,12 +105,12 @@ export default function Credits() {
         ) : (
           <div className="space-y-6">
             <header>
-              <h1 className="font-display text-3xl font-bold tracking-tight">
+              <p className="eyebrow">Wallet</p>
+              <h1 className="font-display mt-2 text-3xl font-bold tracking-tight">
                 Credit wallet
               </h1>
-              <p className="mt-1 text-sm text-muted-foreground">
-                1 credit = $0.01 of rank power. Earn, renew, bid, transfer —
-                and soon: spend on AI.
+              <p className="mt-2 max-w-lg text-[15px] leading-relaxed text-muted-foreground">
+                1 credit = $0.01 of rank power. Earn, renew, bid, transfer.
               </p>
             </header>
 

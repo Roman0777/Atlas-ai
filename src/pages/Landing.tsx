@@ -11,7 +11,6 @@ import { CoordinatesTicker } from "@/components/coordinates-ticker";
 import { TiltCard } from "@/components/tilt-card";
 import { api } from "@/convex/_generated/api";
 import { CategoryIcon } from "@/components/category-icon";
-import { RankBadge } from "@/components/rank-badge";
 import { REFERRAL_CREDIT_CENTS, STAR_CREDIT_CENTS } from "@/lib/categories";
 import { CATEGORIES, formatCents, getCategory } from "@/lib/categories";
 import { EASE, fadeUp, springSnappy, stagger } from "@/lib/motion";
@@ -124,8 +123,8 @@ function CategoryLeaderCards({ filter }: { filter: string }) {
               to={`/board?category=${c.id}`}
               className="group flex items-center gap-4 rounded-2xl border border-border/40 bg-card/60 px-5 py-4 backdrop-blur-sm transition-all hover:border-primary/30 hover:bg-card/80 hover:shadow-card-hover"
             >
-              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-primary/8 text-primary transition-colors group-hover:bg-primary/14">
-                <CategoryIcon icon={c.icon} className="size-5" />
+              <span className="icon-tile size-10 text-primary">
+                <CategoryIcon icon={c.icon} className="size-[18px]" />
               </span>
               <div className="min-w-0 flex-1">
                 <span className="block text-sm font-semibold leading-snug">
@@ -425,9 +424,9 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Nav — floating glass bar */}
-      <header className="fixed top-3 left-1/2 z-50 w-[calc(100%-1.5rem)] max-w-5xl -translate-x-1/2 sm:top-4 sm:w-[calc(100%-2rem)]">
-        <div className="glass flex h-12 items-center justify-between rounded-2xl px-5">
+      {/* Nav */}
+      <header className="sticky top-0 z-40 glass-strong shadow-[0_1px_0_color-mix(in_oklab,var(--border)_55%,transparent),0_12px_32px_-20px_oklch(0.2_0.04_175/0.25)]">
+        <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5">
           <div className="flex items-center gap-2.5">
             <span className="grid size-7 place-items-center rounded-full bg-foreground text-[10px] font-bold text-background">
               AI
@@ -437,13 +436,13 @@ export default function Landing() {
             </span>
           </div>
           <nav className="flex items-center gap-1">
-            <Button asChild variant="ghost" size="sm" className="text-xs">
+            <Button asChild variant="ghost" size="sm" className="font-label rounded-full px-3.5 text-xs text-primary hover:text-primary">
               <Link to="/board">Discover</Link>
             </Button>
-            <Button asChild variant="ghost" size="sm" className="text-xs">
+            <Button asChild variant="ghost" size="sm" className="font-label rounded-full px-3.5 text-xs">
               <Link to="/jobs">Jobs</Link>
             </Button>
-            <Button asChild variant="ghost" size="sm" className="text-xs">
+            <Button asChild variant="ghost" size="sm" className="font-label rounded-full px-3.5 text-xs">
               <Link to="/rules">Rules</Link>
             </Button>
             <ThemeToggle />
@@ -551,11 +550,12 @@ export default function Landing() {
               initial={{ opacity: 0, y: 24, rotate: 1.5 }}
               animate={{ opacity: 1, y: 0, rotate: 0 }}
               transition={{ duration: 0.8, ease: EASE, delay: 0.4 }}
-              className="overflow-hidden rounded-3xl border border-border/50 bg-card/80 shadow-elevated backdrop-blur-md"
+              className="hero-card overflow-hidden rounded-2xl border"
             >
-              <div className="flex items-center justify-between border-b border-border/30 bg-card/40 px-5 py-3.5">
-                <div className="flex items-center gap-2.5">
-                  <span className="grid size-8 place-items-center rounded-full bg-primary/8 text-primary">
+              {/* Card header */}
+              <div className="flex items-center justify-between border-b border-border/60 bg-card/60 px-4 py-3">
+                <div className="flex items-center gap-2">
+                  <span className="icon-tile size-7 text-primary">
                     <Trophy className="size-4" />
                   </span>
                   <span className="font-label text-xs uppercase tracking-wide text-foreground/80">
@@ -571,8 +571,9 @@ export default function Landing() {
                 </span>
               </div>
 
-              <div className="flex items-center gap-3 border-b border-border/20 bg-secondary/20 px-5 py-2">
-                <span className="w-8 text-center font-label text-[9px] uppercase tracking-wide text-muted-foreground/70">
+              {/* Column labels */}
+              <div className="flex items-center gap-3 border-b border-border/40 bg-secondary/30 px-4 py-1.5">
+                <span className="w-7 text-center font-label text-[9px] uppercase tracking-wide text-muted-foreground/60">
                   rank
                 </span>
                 <span className="flex-1 font-label text-[9px] uppercase tracking-wide text-muted-foreground/70">
@@ -600,13 +601,15 @@ export default function Landing() {
                     }
                     className="flex items-center gap-3 px-5 py-3.5"
                   >
-                    <span className="w-8 shrink-0">
-                      <RankBadge rank={r.rank} size="sm" />
+                    <span className="icon-tile size-7 shrink-0 font-mono text-[11px] font-bold tabular-nums">
+                      {r.rank}
                     </span>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-semibold">{r.title}</p>
-                      <p className="mt-0.5 flex items-center gap-1.5 text-xs text-muted-foreground/75">
-                        <CategoryIcon icon={getCategory(r.cat)?.icon} className="size-3.5 shrink-0" />
+                      <p className="mt-0.5 flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                        <span className="icon-tile size-4 place-items-center text-[9px] leading-none">
+                          {r.cat.split(" ")[0]}
+                        </span>
                         <span className="truncate">
                           {getCategory(r.cat)?.label ?? r.cat}
                         </span>
@@ -654,7 +657,7 @@ export default function Landing() {
               key={i}
               className="font-label flex items-center gap-3 px-5 text-xs text-muted-foreground/70"
             >
-              <span className="grid size-7 shrink-0 place-items-center rounded-full border border-border/25 text-primary/50">
+              <span className="icon-tile size-6 text-primary">
                 <CategoryIcon icon={c.icon} className="size-3.5" />
               </span>
               {c.label}
@@ -664,145 +667,149 @@ export default function Landing() {
         </div>
       </div>
 
-      {/* Live money stats — large numeric displays */}
-      <section className="relative py-20 sm:py-28">
-        <div className="mx-auto max-w-6xl px-5">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {potStats.map((s) => (
-              <motion.div
-                key={s.label}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true }}
-                onPointerMove={trackSpotlight}
-                className="spotlight group rounded-2xl border border-border/30 bg-card/40 p-6 backdrop-blur-sm transition-all hover:border-primary/20 hover:bg-card/60 hover:shadow-card-hover"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-label text-[10px] uppercase tracking-wide text-muted-foreground/70">
-                    {s.label}
-                  </span>
-                  <span className="grid size-9 shrink-0 place-items-center rounded-full bg-primary/6 text-primary/70 transition-colors group-hover:bg-primary/12">
-                    {s.icon}
-                  </span>
-                </div>
-                <div className="font-mono mt-4 text-3xl font-bold tracking-tight tabular-nums">
-                  {s.cents != null ? (
-                    <AnimatedCents
-                      value={s.cents}
-                      className="font-mono text-3xl font-bold tracking-tight tabular-nums"
-                    />
-                  ) : s.value != null ? (
-                    s.value.toLocaleString()
-                  ) : (
-                    "—"
-                  )}
-                </div>
-                <div className="mt-4 flex items-center gap-2">
-                  <span className="h-0.5 w-8 rounded-full bg-primary/40" />
-                  <span className="font-label text-[9px] uppercase tracking-wide text-muted-foreground/30">
-                    {s.foot}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+      {/* Live money stats — the whole pot, in public */}
+      <section className="border-b border-border/50 bg-card/60">
+        <div aria-hidden className="beam-line" />
+        <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-4 px-5 py-12 sm:grid-cols-2 lg:grid-cols-4">
+          {potStats.map((s) => (
+            <motion.div
+              key={s.label}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true }}
+              onPointerMove={trackSpotlight}
+              className="spotlight group card-surface rounded-2xl p-5 transition-[box-shadow,border-color,transform] duration-300 hover:-translate-y-1"
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-label text-[10px] uppercase tracking-wide text-muted-foreground">
+                  {s.label}
+                </span>
+                <span className="icon-tile size-8 text-primary">
+                  {s.icon}
+                </span>
+              </div>
+              <div className="font-mono mt-3 text-2xl font-bold tracking-tight tabular-nums">
+                {s.cents != null ? (
+                  <AnimatedCents
+                    value={s.cents}
+                    className="font-mono text-2xl font-bold tracking-tight tabular-nums"
+                  />
+                ) : s.value != null ? (
+                  s.value.toLocaleString()
+                ) : (
+                  "—"
+                )}
+              </div>
+              <div className="mt-3 flex items-center gap-2">
+                <span className="h-0.5 w-8 rounded-full bg-primary" />
+                <span className="font-label text-[9px] uppercase tracking-wide text-muted-foreground/50">
+                  {s.foot}
+                </span>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </section>
 
-      {/* How it works — editorial cards */}
-      <section className="relative py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-5">
+      {/* How it works */}
+      <section className="mx-auto w-full max-w-6xl px-5 py-16 sm:py-24">
+        <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }} className="mx-auto max-w-2xl text-center">
+          <motion.p variants={fadeUp} className="eyebrow justify-center">
+            Simple mechanics, honestly priced
+          </motion.p>
           <motion.h2
             variants={fadeUp}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-80px" }}
-            className="type-display-lg mx-auto max-w-2xl text-center"
+            className="type-display mt-4 text-balance"
           >
             Three ways to move the board
           </motion.h2>
-          <motion.div
-            variants={stagger(0.1)}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-80px" }}
-            className="mt-14 grid gap-5 md:grid-cols-3"
-          >
-            {[
-              {
-                icon: <Star className="size-5" />,
-                kicker: "Free",
-                title: "Star it",
-                mono: "+$0.10 credit per star",
-                body: "Anyone can star any ranked product. Every star adds $0.10 of rank credit — the crowd's signal, counted in real money terms.",
-              },
-              {
-                icon: <Rocket className="size-5" />,
-                kicker: "Paid",
-                title: "Boost yours",
-                mono: "5× the leader banks 3h of lock",
-                body: "Every dollar you boost adds straight to your total. Drop 5x the leader's bank in one hit and your #1 spot locks for 3 hours.",
-              },
-              {
-                icon: <ThumbsDown className="size-5" />,
-                kicker: "Paid",
-                title: "Down-rank rivals",
-                mono: "2× the target's banked total",
-                body: "Sabotage costs double their banked total — and every dollar drags their rank straight down. They can boost back. War.",
-              },
-            ].map((f) => (
-              <motion.div
-                key={f.title}
-                variants={fadeUp}
-                whileHover={{ y: -5, transition: springSnappy }}
-                onPointerMove={trackSpotlight}
-                className="spotlight group rounded-2xl border border-border/30 bg-card/40 p-7 backdrop-blur-sm transition-all hover:border-primary/20 hover:bg-card/60 hover:shadow-card-hover"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="grid size-12 place-items-center rounded-2xl border border-border/30 bg-primary/8 text-primary transition-colors group-hover:border-primary/25 group-hover:bg-primary/14">
-                    {f.icon}
-                  </span>
-                  <span
-                    className={cn(
-                      "font-label rounded-full border px-2.5 py-1 text-[9px] uppercase tracking-wide",
-                      f.kicker === "Paid"
-                        ? "border-[color-mix(in_oklab,var(--flame)_30%,transparent)] bg-[color-mix(in_oklab,var(--flame)_6%,transparent)] text-accent-orange"
-                        : "border-border/30 text-muted-foreground/75",
-                    )}
-                  >
-                    {f.kicker}
-                  </span>
-                </div>
-                <h3 className="font-display mt-5 text-lg font-bold leading-snug">
-                  {f.title}
-                </h3>
-                <p className="mt-3 text-sm leading-6 text-muted-foreground/60">{f.body}</p>
-                <div className="mt-5 flex items-center gap-2 border-t border-border/20 pt-4">
-                  <span className="size-1.5 rounded-full bg-primary/60" />
-                  <span className="font-mono text-[10px] tabular-nums text-muted-foreground/70">
-                    {f.mono}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
+          <motion.p variants={fadeUp} className="mt-3 text-base leading-relaxed text-muted-foreground">
+            Star for free. Boost with real money. Or pay to move a rival down. Every action lands on a public receipt.
+          </motion.p>
+        </motion.div>
+        <motion.div
+          variants={stagger(0.1)}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
+          className="mt-10 grid gap-4 md:grid-cols-3"
+        >
+          {[
+            {
+              icon: <Star className="size-5" />,
+              kicker: "Free",
+              title: "Star it",
+              mono: "+$0.10 credit per star",
+              body: "Anyone can star any ranked product. Every star adds $0.10 of rank credit — the crowd's signal, counted in real money terms.",
+            },
+            {
+              icon: <Rocket className="size-5" />,
+              kicker: "Paid",
+              title: "Boost yours",
+              mono: "5× the leader banks 3h of lock",
+              body: "Every dollar you boost adds straight to your total. Drop 5x the leader's bank in one hit and your #1 spot locks for 3 hours.",
+            },
+            {
+              icon: <ThumbsDown className="size-5" />,
+              kicker: "Paid",
+              title: "Down-rank rivals",
+              mono: "2× the target's banked total",
+              body: "Sabotage costs double their banked total — and every dollar drags their rank straight down. They can boost back. War.",
+            },
+          ].map((f) => (
+            <motion.div
+              key={f.title}
+              variants={fadeUp}
+              whileHover={{ y: -3, transition: springSnappy }}
+              onPointerMove={trackSpotlight}
+              className="spotlight group rounded-2xl border border-border/50 bg-card shadow-apple p-6 transition-[box-shadow,border-color,transform] duration-300 hover:border-primary/30 hover:shadow-apple-hover glow-hover"
+            >
+              <div className="flex items-center justify-between">
+                <span className="grid size-11 place-items-center rounded-full bg-primary/8 text-primary transition-colors group-hover:bg-primary/15">
+                  {f.icon}
+                </span>
+                <span
+                  className={cn(
+                    "font-label rounded-full border px-2 py-0.5 text-[9px] uppercase tracking-wide",
+                    f.kicker === "Paid"
+                      ? "border-[color-mix(in_oklab,var(--flame)_35%,transparent)] bg-[color-mix(in_oklab,var(--flame)_8%,transparent)] text-accent-orange"
+                      : "border-border/60 text-muted-foreground/70",
+                  )}
+                >
+                  {f.kicker}
+                </span>
+              </div>
+              <h3 className="font-display mt-4 text-base font-bold leading-snug">
+                {f.title}
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">{f.body}</p>
+              <div className="mt-4 flex items-center gap-1.5 border-t border-border/40 pt-3">
+                <span className="size-1.5 rounded-full bg-primary" />
+                <span className="font-mono text-[10px] tabular-nums text-muted-foreground/70">
+                  {f.mono}
+                </span>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
       </section>
 
-      {/* How rank works */}
-      <section className="relative py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-5">
+      {/* How rank works — the mechanics, in public */}
+      <section className="border-b border-border/50 bg-card/40">
+        <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:py-24">
           <motion.div
             variants={stagger(0.09)}
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, margin: "-80px" }}
           >
-            <p className="font-label flex items-center gap-2 text-xs font-medium text-primary/70">
-              <span className="inline-block size-1.5 rounded-full bg-primary/60" />
+            <motion.p
+              variants={fadeUp}
+              className="eyebrow"
+            >
               The mechanics
-            </p>
+            </motion.p>
             <h2 className="type-display-lg mt-4">
               How rank works.
             </h2>
@@ -922,10 +929,8 @@ export default function Landing() {
                     onPointerMove={trackSpotlight}
                     className="spotlight group flex items-center gap-3 rounded-2xl border border-border/30 bg-card/40 p-4 backdrop-blur-sm transition-all hover:border-primary/20 hover:bg-card/60 hover:shadow-card-hover"
                   >
-                    <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/8 text-primary transition-colors group-hover:bg-primary/14">
-                      <CategoryIcon category={s.id} className="size-4.5" />
-                    </span>
-                    <span className="text-sm font-semibold">{s.label}</span>
+                    <span className="icon-tile size-9 text-primary"><CategoryIcon category={s.id} className="size-4" /></span>
+                    <span className="text-[13px] font-semibold">{s.label}</span>
                   </Link>
                 </motion.div>
               ))}
