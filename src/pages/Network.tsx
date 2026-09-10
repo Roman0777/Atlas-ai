@@ -13,7 +13,6 @@ import {
   Building2,
   Loader2,
   Rocket,
-  Users,
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
@@ -120,7 +119,7 @@ export default function Network() {
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader active="network" />
-      <main className="mx-auto w-full max-w-6xl px-4 py-8">
+      <main className="mx-auto w-full max-w-6xl px-5 py-10">
         {authLoading ? (
           <div className="flex min-h-[40vh] items-center justify-center">
             <Loader2 className="size-6 animate-spin text-muted-foreground" />
@@ -133,8 +132,10 @@ export default function Network() {
           <div className="space-y-6">
             <header className="flex flex-wrap items-center gap-3">
               <div className="flex-1">
-                <h1 className="flex items-center gap-2 font-display text-3xl font-bold tracking-tight">
-                  <Users className="size-6 text-primary" />
+                <p className="eyebrow">
+                  Founders meet capital
+                </p>
+                <h1 className="mt-2 flex items-center gap-2 font-display text-3xl font-bold tracking-tight">
                   Deal Room
                 </h1>
                 <p className="mt-1 text-sm text-muted-foreground">

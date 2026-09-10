@@ -21,10 +21,10 @@ export function SiteHeader({
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-border/40 glass-strong">
-        <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between gap-3 px-4">
+      <header className="sticky top-0 z-40 glass-strong shadow-[0_1px_0_color-mix(in_oklab,var(--border)_55%,transparent),0_12px_32px_-20px_oklch(0.2_0.04_175/0.25)]">
+        <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-3 px-5">
           <Link to="/" className="flex items-center gap-2.5">
-            <span className="grid size-8 place-items-center rounded-full bg-foreground text-[11px] font-bold text-background">
+            <span className="grid size-8 place-items-center rounded-full bg-foreground text-[11px] font-bold text-background shadow-[0_4px_12px_-4px_oklch(0.2_0.04_175/0.5)]">
               AI
             </span>
             <span className="font-display text-xl font-bold tracking-tight">
@@ -32,14 +32,14 @@ export function SiteHeader({
             </span>
           </Link>
 
-          <nav className="flex items-center gap-1.5">
-            <Button asChild variant="ghost" size="sm" className="relative">
+          <nav className="flex items-center gap-1">
+            <Button asChild variant="ghost" size="sm" className="relative rounded-full px-3.5">
               <Link to="/board">
                 {active === "board" && (
                   <motion.span
                     layoutId="nav-pill"
                     transition={springSnappy}
-                    className="absolute inset-0 rounded-md bg-secondary"
+                    className="absolute inset-0 rounded-full bg-secondary shadow-[inset_0_1px_2px_oklch(0.2_0.04_175/0.12)]"
                   />
                 )}
                 <span className="relative z-10 inline-flex items-center gap-1.5">
@@ -48,34 +48,34 @@ export function SiteHeader({
                 </span>
               </Link>
             </Button>
-            <Button asChild variant="ghost" size="sm">
+            <Button asChild variant="ghost" size="sm" className="rounded-full px-3.5">
               <Link to="/jobs">Jobs</Link>
             </Button>
-            <Button asChild variant="ghost" size="sm" className="relative">
+            <Button asChild variant="ghost" size="sm" className="relative rounded-full px-3.5">
               <Link to="/news">
                 {active === "news" && (
                   <motion.span
                     layoutId="nav-pill"
                     transition={springSnappy}
-                    className="absolute inset-0 rounded-md bg-secondary"
+                    className="absolute inset-0 rounded-full bg-secondary shadow-[inset_0_1px_2px_oklch(0.2_0.04_175/0.12)]"
                   />
                 )}
                 <span className="relative z-10">News</span>
               </Link>
             </Button>
-            <Button asChild variant="ghost" size="sm">
+            <Button asChild variant="ghost" size="sm" className="rounded-full px-3.5">
               <Link to="/news#newsletter">
                 <Mail className="size-4" />
                 Newsletter
               </Link>
             </Button>
-            <Button asChild variant="ghost" size="sm" className="relative">
+            <Button asChild variant="ghost" size="sm" className="relative rounded-full px-3.5">
               <Link to="/network">
                 {active === "network" && (
                   <motion.span
                     layoutId="nav-pill"
                     transition={springSnappy}
-                    className="absolute inset-0 rounded-md bg-secondary"
+                    className="absolute inset-0 rounded-full bg-secondary shadow-[inset_0_1px_2px_oklch(0.2_0.04_175/0.12)]"
                   />
                 )}
                 <span className="relative z-10 inline-flex items-center gap-1.5">
@@ -84,7 +84,7 @@ export function SiteHeader({
                 </span>
               </Link>
             </Button>
-            <Button asChild variant="ghost" size="sm">
+            <Button asChild variant="ghost" size="sm" className="rounded-full px-3.5">
               <Link to="/rules">Rules</Link>
             </Button>
             <CreditChip />
@@ -92,13 +92,13 @@ export function SiteHeader({
             <ThemeToggle />
             {isAuthenticated ? (
               <>
-                <Button asChild variant="ghost" size="sm" className="relative">
+                <Button asChild variant="ghost" size="sm" className="relative rounded-full px-3.5">
                   <Link to="/dashboard">
                     {active === "dashboard" && (
                       <motion.span
                         layoutId="nav-pill"
                         transition={springSnappy}
-                        className="absolute inset-0 rounded-md bg-secondary"
+                        className="absolute inset-0 rounded-full bg-secondary shadow-[inset_0_1px_2px_oklch(0.2_0.04_175/0.12)]"
                       />
                     )}
                     <span className="relative z-10 inline-flex items-center gap-1.5">

@@ -117,8 +117,8 @@ export default function Jobs() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero */}
-      <section className="border-b border-border/60 bg-ledger">
-        <div className="mx-auto max-w-6xl px-4 py-10">
+      <section className="border-b border-border/50 bg-ledger grain">
+        <div className="mx-auto max-w-6xl px-5 py-12 sm:py-14">
           <motion.div
             variants={stagger(0.06, 0.05)}
             initial="hidden"
@@ -126,9 +126,8 @@ export default function Jobs() {
           >
             <motion.p
               variants={fadeUp}
-              className="font-label flex items-center gap-2 text-xs font-medium text-primary"
+              className="eyebrow"
             >
-              <span className="inline-block size-2 rounded-full bg-primary" />
               Jobs & Careers
             </motion.p>
             <motion.h1
@@ -139,7 +138,7 @@ export default function Jobs() {
             </motion.h1>
             <motion.p
               variants={fadeUp}
-              className="mt-2 max-w-xl text-sm text-muted-foreground sm:text-base"
+              className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground"
             >
               Aggregated from LinkedIn, Indeed, Glassdoor, Remotive, and
               Arbeitnow. Updated automatically. Apply directly.
@@ -148,7 +147,7 @@ export default function Jobs() {
 
           {/* Stats strip */}
           {stats && (
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-wrap gap-2.5">
               <Badge variant="secondary" className="gap-1.5">
                 <Zap className="size-3" />
                 {totalJobs.toLocaleString()} jobs
@@ -181,7 +180,7 @@ export default function Jobs() {
         </div>
       </section>
 
-      <main className="mx-auto max-w-6xl px-4 py-8">
+      <main className="mx-auto max-w-6xl px-5 py-10">
         {/* Search + filters */}
         <div className="mb-6 flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[240px] max-w-md">
@@ -194,7 +193,7 @@ export default function Jobs() {
             />
           </div>
 
-          <div className="flex gap-1 rounded-lg border border-border/70 bg-card p-0.5">
+          <div className="flex gap-1 rounded-full border border-border/60 bg-card p-1 shadow-apple">
             {[
               { val: undefined, label: "All" },
               { val: true, label: "🌍 Remote" },
@@ -204,9 +203,9 @@ export default function Jobs() {
                 type="button"
                 onClick={() => setRemote(opt.val)}
                 className={cn(
-                  "rounded-md px-3 py-1.5 text-xs font-medium transition",
+                  "rounded-full px-3.5 py-1.5 text-xs font-semibold tracking-tight outline-none transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                   remote === opt.val
-                    ? "bg-primary text-primary-foreground"
+                    ? "bg-primary text-primary-foreground shadow-[0_2px_10px_-3px_var(--primary)]"
                     : "text-muted-foreground hover:text-foreground",
                 )}
               >
@@ -218,7 +217,7 @@ export default function Jobs() {
           <select
             value={source}
             onChange={(e) => setSource(e.target.value)}
-            className="rounded-lg border border-border/70 bg-card px-3 py-2 text-xs"
+            className="h-10 rounded-full border border-border/60 bg-card px-4 text-xs font-medium shadow-apple outline-none transition-colors hover:border-primary/40 focus-visible:border-primary/60 focus-visible:ring-2 focus-visible:ring-ring/40"
           >
             <option value="">All sources</option>
             <option value="jsearch">LinkedIn · Indeed · Glassdoor</option>
@@ -229,7 +228,7 @@ export default function Jobs() {
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="rounded-lg border border-border/70 bg-card px-3 py-2 text-xs"
+            className="h-10 rounded-full border border-border/60 bg-card px-4 text-xs font-medium shadow-apple outline-none transition-colors hover:border-primary/40 focus-visible:border-primary/60 focus-visible:ring-2 focus-visible:ring-ring/40"
           >
             {CATEGORY_FILTERS.map((c) => (
               <option key={c.value} value={c.value}>
@@ -258,7 +257,7 @@ export default function Jobs() {
             ))}
           </div>
         ) : jobs.length === 0 ? (
-          <div className="rounded-xl border border-border/70 bg-card p-16 text-center">
+          <div className="rounded-2xl border border-border/50 bg-card shadow-apple p-16 text-center">
             <p className="type-heading">
               {query ? `No results for "${query}"` : "No jobs loaded yet."}
             </p>
@@ -286,13 +285,13 @@ export default function Jobs() {
                   delay: Math.min(i * 0.03, 0.3),
                   ease: EASE,
                 }}
-                whileHover={{ x: 4, transition: springSnappy }}
-                className="group rounded-xl border border-border/70 bg-card p-5 transition-colors hover:border-primary/40 hover:shadow-sm"
+                whileHover={{ y: -2, transition: springSnappy }}
+                className="group rounded-2xl border border-border/50 bg-card p-5 shadow-apple transition-[box-shadow,border-color,transform] duration-300 hover:border-primary/40 hover:shadow-apple-hover"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                      <h3 className="truncate text-sm font-bold">
+                      <h3 className="font-display truncate text-[15px] font-semibold tracking-tight">
                         {job.title}
                       </h3>
                       {job.isRemote && (

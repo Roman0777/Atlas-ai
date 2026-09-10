@@ -23,8 +23,6 @@ import {
   Crown,
   Gavel,
   Medal,
-  Rocket,
-  Star,
   ThumbsDown,
   Trophy,
   Users,
@@ -123,7 +121,7 @@ function CategoryLeaderCards({ filter }: { filter: string }) {
               className="group flex items-center gap-3 rounded-xl border border-border/60 bg-card px-4 py-3 transition-all hover:border-primary/40 hover:shadow-card-hover"
             >
               {/* Circular icon — emoji only, no text inside */}
-              <span className="grid size-10 shrink-0 place-items-center overflow-hidden rounded-full bg-primary/8 text-sm leading-none transition-colors group-hover:bg-primary/15">
+              <span className="icon-tile size-10 overflow-hidden text-sm leading-none">
                 {c.emoji}
               </span>
               <div className="min-w-0 flex-1">
@@ -441,8 +439,8 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-background">
       {/* Nav */}
-      <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur">
-        <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4">
+      <header className="sticky top-0 z-40 glass-strong shadow-[0_1px_0_color-mix(in_oklab,var(--border)_55%,transparent),0_12px_32px_-20px_oklch(0.2_0.04_175/0.25)]">
+        <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5">
           <div className="flex items-center gap-2.5">
             <span className="grid size-8 place-items-center rounded-full bg-foreground text-[11px] font-bold text-background">
               AI
@@ -451,14 +449,14 @@ export default function Landing() {
               Atlas<span className="text-primary">.</span>
             </span>
           </div>
-          <nav className="flex items-center gap-1.5">
-            <Button asChild variant="ghost" size="sm" className="font-label text-xs text-primary hover:text-primary">
+          <nav className="flex items-center gap-1">
+            <Button asChild variant="ghost" size="sm" className="font-label rounded-full px-3.5 text-xs text-primary hover:text-primary">
               <Link to="/board">Discover</Link>
             </Button>
-            <Button asChild variant="ghost" size="sm" className="font-label text-xs">
+            <Button asChild variant="ghost" size="sm" className="font-label rounded-full px-3.5 text-xs">
               <Link to="/jobs">Jobs</Link>
             </Button>
-            <Button asChild variant="ghost" size="sm" className="font-label text-xs">
+            <Button asChild variant="ghost" size="sm" className="font-label rounded-full px-3.5 text-xs">
               <Link to="/rules">Rules</Link>
             </Button>
             <ThemeToggle />
@@ -566,12 +564,12 @@ export default function Landing() {
               initial={{ opacity: 0, y: 24, rotate: 1.5 }}
               animate={{ opacity: 1, y: 0, rotate: 0 }}
               transition={{ duration: 0.8, ease: EASE, delay: 0.4 }}
-              className="overflow-hidden rounded-2xl border border-border/70 bg-card shadow-xl shadow-primary/5"
+              className="hero-card overflow-hidden rounded-2xl border"
             >
               {/* Card header */}
               <div className="flex items-center justify-between border-b border-border/60 bg-card/60 px-4 py-3">
                 <div className="flex items-center gap-2">
-                  <span className="grid size-7 place-items-center rounded-full bg-primary/10 text-[13px]">
+                  <span className="icon-tile size-7 text-[13px]">
                     🏆
                   </span>
                   <span className="font-label text-[11px] uppercase tracking-wide text-foreground">
@@ -589,7 +587,7 @@ export default function Landing() {
 
               {/* Column labels */}
               <div className="flex items-center gap-3 border-b border-border/40 bg-secondary/30 px-4 py-1.5">
-                <span className="w-8 text-center font-label text-[9px] uppercase tracking-wide text-muted-foreground/60">
+                <span className="w-7 text-center font-label text-[9px] uppercase tracking-wide text-muted-foreground/60">
                   rank
                 </span>
                 <span className="flex-1 font-label text-[9px] uppercase tracking-wide text-muted-foreground/60">
@@ -617,13 +615,13 @@ export default function Landing() {
                     }
                     className="flex items-center gap-3 px-4 py-3"
                   >
-                    <span className="w-8 shrink-0 text-center font-mono text-xs font-bold tabular-nums text-muted-foreground">
+                    <span className="icon-tile size-7 shrink-0 font-mono text-[11px] font-bold tabular-nums">
                       {r.rank}
                     </span>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-semibold">{r.title}</p>
                       <p className="mt-0.5 flex items-center gap-1.5 text-[11px] text-muted-foreground">
-                        <span className="inline-grid size-4 shrink-0 place-items-center rounded-full bg-primary/8 text-[9px] leading-none">
+                        <span className="icon-tile size-4 place-items-center text-[9px] leading-none">
                           {r.cat.split(" ")[0]}
                         </span>
                         <span className="truncate">
@@ -673,7 +671,7 @@ export default function Landing() {
               key={i}
               className="font-label flex items-center gap-2.5 px-4 text-[11px] text-muted-foreground"
             >
-              <span className="grid size-6 shrink-0 place-items-center overflow-hidden rounded-full border border-border/40 bg-card text-[10px] leading-none shadow-sm">
+              <span className="icon-tile size-6 overflow-hidden text-[10px] leading-none">
                 {c.emoji}
               </span>
               {c.label}
@@ -684,9 +682,9 @@ export default function Landing() {
       </div>
 
       {/* Live money stats — the whole pot, in public */}
-      <section className="border-b border-border/60 bg-card/60">
+      <section className="border-b border-border/50 bg-card/60">
         <div aria-hidden className="beam-line" />
-        <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-3 px-4 py-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-4 px-5 py-12 sm:grid-cols-2 lg:grid-cols-4">
           {potStats.map((s) => (
             <motion.div
               key={s.label}
@@ -695,13 +693,13 @@ export default function Landing() {
               whileInView="show"
               viewport={{ once: true }}
               onPointerMove={trackSpotlight}
-              className="spotlight group rounded-xl border border-border/60 bg-card p-5 transition-all hover:border-primary/40 hover:shadow-card-hover"
+              className="spotlight group card-surface rounded-2xl p-5 transition-[box-shadow,border-color,transform] duration-300 hover:-translate-y-1"
             >
               <div className="flex items-center justify-between">
                 <span className="font-label text-[10px] uppercase tracking-wide text-muted-foreground">
                   {s.label}
                 </span>
-                <span className="grid size-8 shrink-0 place-items-center rounded-full bg-primary/8 text-primary transition-colors group-hover:bg-primary/15">
+                <span className="icon-tile size-8 text-primary">
                   {s.icon}
                 </span>
               </div>
@@ -729,16 +727,21 @@ export default function Landing() {
       </section>
 
       {/* How it works */}
-      <section className="mx-auto w-full max-w-6xl px-4 py-16 sm:py-20">
-        <motion.h2
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-60px" }}
-          className="type-display text-center"
-        >
-          Three ways to move the board
-        </motion.h2>
+      <section className="mx-auto w-full max-w-6xl px-5 py-16 sm:py-24">
+        <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }} className="mx-auto max-w-2xl text-center">
+          <motion.p variants={fadeUp} className="eyebrow justify-center">
+            Simple mechanics, honestly priced
+          </motion.p>
+          <motion.h2
+            variants={fadeUp}
+            className="type-display mt-4 text-balance"
+          >
+            Three ways to move the board
+          </motion.h2>
+          <motion.p variants={fadeUp} className="mt-3 text-base leading-relaxed text-muted-foreground">
+            Star for free. Boost with real money. Or pay to move a rival down. Every action lands on a public receipt.
+          </motion.p>
+        </motion.div>
         <motion.div
           variants={stagger(0.1)}
           initial="hidden"
@@ -748,7 +751,6 @@ export default function Landing() {
         >
           {[
             {
-              icon: <Star className="size-5" />,
               emoji: "⭐",
               kicker: "Free",
               title: "Star it",
@@ -756,7 +758,6 @@ export default function Landing() {
               body: "Anyone can star any ranked product. Every star adds $0.10 of rank credit — the crowd's signal, counted in real money terms.",
             },
             {
-              icon: <Rocket className="size-5" />,
               emoji: "🚀",
               kicker: "Paid",
               title: "Boost yours",
@@ -764,7 +765,6 @@ export default function Landing() {
               body: "Every dollar you boost adds straight to your total. Drop 5x the leader's bank in one hit and your #1 spot locks for 3 hours.",
             },
             {
-              icon: <ThumbsDown className="size-5" />,
               emoji: "👎",
               kicker: "Paid",
               title: "Down-rank rivals",
@@ -775,12 +775,12 @@ export default function Landing() {
             <motion.div
               key={f.title}
               variants={fadeUp}
-              whileHover={{ y: -5, transition: springSnappy }}
+              whileHover={{ y: -3, transition: springSnappy }}
               onPointerMove={trackSpotlight}
-              className="spotlight group rounded-xl border border-border/70 bg-card p-6 transition-all hover:border-primary/30 hover:shadow-card-hover glow-hover"
+              className="spotlight group rounded-2xl border border-border/50 bg-card shadow-apple p-6 transition-[box-shadow,border-color,transform] duration-300 hover:border-primary/30 hover:shadow-apple-hover glow-hover"
             >
               <div className="flex items-center justify-between">
-                <span className="grid size-11 place-items-center overflow-hidden rounded-full border border-border/60 bg-primary/8 text-xl leading-none transition-colors group-hover:border-primary/30 group-hover:bg-primary/15">
+                <span className="grid size-11 place-items-center overflow-hidden rounded-full bg-primary/8 text-xl leading-none transition-colors group-hover:bg-primary/15">
                   {f.emoji}
                 </span>
                 <span
@@ -810,8 +810,8 @@ export default function Landing() {
       </section>
 
       {/* How rank works — the mechanics, in public */}
-      <section className="border-b border-border/60 bg-card/40">
-        <div className="mx-auto w-full max-w-6xl px-4 py-16 sm:py-20">
+      <section className="border-b border-border/50 bg-card/40">
+        <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:py-24">
           <motion.div
             variants={stagger(0.09)}
             initial="hidden"
@@ -820,9 +820,8 @@ export default function Landing() {
           >
             <motion.p
               variants={fadeUp}
-              className="font-label flex items-center gap-2 text-xs font-medium text-primary"
+              className="eyebrow"
             >
-              <span className="inline-block size-2 rounded-full bg-primary" />
               The mechanics
             </motion.p>
             <motion.h2
@@ -961,7 +960,7 @@ export default function Landing() {
                     onPointerMove={trackSpotlight}
                     className="spotlight group flex items-center gap-3 rounded-xl border border-border/70 bg-card p-4 transition-all hover:border-primary/50 hover:shadow-card-hover glow-hover"
                   >
-                    <span className="inline-flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/8 text-sm leading-none">{s.emoji}</span>
+                    <span className="icon-tile size-9 overflow-hidden text-sm leading-none">{s.emoji}</span>
                     <span className="text-[13px] font-semibold">{s.label}</span>
                   </Link>
                 </motion.div>

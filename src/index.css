@@ -1208,6 +1208,62 @@ body::after {
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260' viewBox='0 0 260 260'%3E%3Cg fill='none' stroke='%231F6F5C' stroke-opacity='0.055' stroke-width='1'%3E%3Cpath d='M20 130c0-45 40-80 90-80s90 35 90 80-40 80-90 80-90-35-90-80z'/%3E%3Cpath d='M40 130c0-35 32-62 70-62s70 27 70 62-32 62-70 62-70-27-70-62z'/%3E%3Cpath d='M60 130c0-25 22-44 50-44s50 19 50 44-22 44-50 44-50-19-50-44z'/%3E%3Cpath d='M80 130c0-15 13-26 30-26s30 11 30 26-13 26-30 26-30-11-30-26z'/%3E%3Cpath d='M100 130c0-6 5-10 10-10s10 4 10 10-5 10-10 10-10-4-10-10z'/%3E%3C/g%3E%3C/svg%3E");
 }
 
+/* ============================================================================
+ * Apple-grade polish layer (additive — protected tokens above are untouched).
+ * Calm motion, soft layered shadows, consistent focus, gentle card lift,
+ * quiet section rhythm. All animation is disabled for reduced-motion users.
+ * ========================================================================== */
+
+.shadow-apple { box-shadow: var(--shadow-apple); }
+.shadow-apple-lg { box-shadow: var(--shadow-apple-lg); }
+.shadow-apple-hover { box-shadow: var(--shadow-apple-hover); }
+
+/* ---- Section shell — consistent vertical rhythm, Apple-like restraint ---- */
+.section-shell {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 72rem;
+  padding-inline: 1rem;
+  padding-block: 4rem;
+}
+@media (min-width: 640px) {
+  .section-shell { padding-block: 5rem; }
+}
+
+/* ---- Eyebrow — calm product eyebrow used above section titles ---- */
+.eyebrow {
+  font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--primary);
+}
+.eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--primary);
+  flex-shrink: 0;
+}
+
+/* ---- Card hover — calm lift (pages opt-in; keeps overlay pseudo-elements safe) ---- */
+.lift-hover {
+  transition: box-shadow 0.32s var(--ease-signature), border-color 0.32s var(--ease-signature), transform 0.32s var(--ease-signature);
+}
+.lift-hover:hover {
+  border-color: color-mix(in oklab, var(--primary) 38%, transparent);
+  box-shadow: var(--shadow-apple-hover);
+  transform: translateY(-3px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lift-hover:hover { transform: none; }
+}
+
 /* ---- Marquee / scroll edge fade ---- */
 .fade-mask-x {
   -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
@@ -1290,4 +1346,103 @@ header.glass-strong::after {
     transparent 95%
   );
   pointer-events: none;
+}
+/* ==========================================================================
+ * Premium Pass Phase 2 -- iOS-grade materials (additive; derives from the
+ * protected theme tokens via color-mix). card-surface / icon-tile /
+ * hero-card are unlayered so they win over layered utilities, matching
+ * .glass / .card-premium behavior above.
+ * ========================================================================== */
+
+/* Card material -- soft iOS surface: lit top edge + layered depth */
+.card-surface {
+  background:
+    linear-gradient(180deg, oklch(1 0 0 / 0.5), oklch(1 0 0 / 0.18) 20%, oklch(0 0 0 / 0) 46%),
+    var(--card);
+  border-color: color-mix(in oklab, var(--border) 60%, transparent);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.5),
+    0 1px 2px oklch(0.2 0.04 175 / 0.04),
+    0 8px 24px -8px oklch(0.2 0.04 175 / 0.08),
+    0 24px 56px -24px oklch(0.2 0.05 175 / 0.1);
+}
+.dark .card-surface {
+  background:
+    linear-gradient(180deg, oklch(1 0 0 / 0.05), oklch(1 0 0 / 0.02) 18%, oklch(0 0 0 / 0) 46%),
+    var(--card);
+  border-color: color-mix(in oklab, #dce7de 9%, transparent);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.06),
+    0 1px 2px oklch(0.05 0.02 175 / 0.3),
+    0 8px 24px -8px oklch(0.05 0.02 175 / 0.35),
+    0 24px 56px -24px oklch(0.05 0.02 175 / 0.45);
+}
+
+/* Icon tile -- frosted squircle for icons, badges, emoji chips */
+.icon-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: calc(var(--radius) + 2px);
+  background:
+    linear-gradient(180deg, oklch(1 0 0 / 0.65), oklch(1 0 0 / 0.22) 55%, oklch(0 0 0 / 0)),
+    color-mix(in oklab, var(--primary) 10%, var(--card));
+  border: 1px solid color-mix(in oklab, var(--primary) 16%, transparent);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.55),
+    0 1px 2px oklch(0.2 0.04 175 / 0.06),
+    0 4px 12px -4px color-mix(in oklab, var(--primary) 22%, transparent);
+  color: var(--primary);
+  transition:
+    transform 0.25s var(--ease-signature, cubic-bezier(0.22, 1, 0.36, 1)),
+    box-shadow 0.25s var(--ease-signature, cubic-bezier(0.22, 1, 0.36, 1)),
+    border-color 0.25s var(--ease-signature, cubic-bezier(0.22, 1, 0.36, 1));
+}
+.dark .icon-tile {
+  background:
+    linear-gradient(180deg, oklch(1 0 0 / 0.08), oklch(1 0 0 / 0.03) 55%, oklch(0 0 0 / 0)),
+    color-mix(in oklab, var(--primary) 20%, var(--card));
+  border-color: color-mix(in oklab, var(--primary) 32%, transparent);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.08),
+    0 1px 2px oklch(0.05 0.02 175 / 0.35),
+    0 4px 12px -4px oklch(0.05 0.02 175 / 0.4);
+  color: color-mix(in oklab, var(--primary) 55%, #dce7de);
+}
+.group:hover .icon-tile,
+.group\/card:hover .icon-tile {
+  transform: translateY(-1px) scale(1.04);
+  border-color: color-mix(in oklab, var(--primary) 38%, transparent);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.6),
+    0 6px 18px -6px color-mix(in oklab, var(--primary) 38%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .group:hover .icon-tile,
+  .group\/card:hover .icon-tile {
+    transform: none;
+  }
+}
+
+/* Hero card -- frosted glass slab floating over the wireframe globe */
+.hero-card {
+  background: color-mix(in oklab, var(--card) 82%, transparent);
+  backdrop-filter: blur(20px) saturate(1.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  border: 1px solid color-mix(in oklab, var(--card) 88%, var(--border));
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.5),
+    0 2px 4px oklch(0.2 0.04 175 / 0.04),
+    0 24px 64px -16px oklch(0.2 0.05 175 / 0.24),
+    0 48px 120px -32px oklch(0.15 0.05 175 / 0.18);
+}
+.dark .hero-card {
+  background: color-mix(in oklab, var(--card) 78%, transparent);
+  border-color: color-mix(in oklab, #dce7de 10%, transparent);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.08),
+    0 2px 4px oklch(0.05 0.02 175 / 0.3),
+    0 24px 64px -16px oklch(0.05 0.02 175 / 0.5),
+    0 48px 120px -32px oklch(0.03 0.02 175 / 0.45);
 }

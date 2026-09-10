@@ -58,13 +58,12 @@ const RULES = [
 export default function Rules() {
   return (
     <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-3xl px-4 py-16 sm:py-24">
+      <div className="mx-auto max-w-3xl px-5 py-16 sm:py-24">
         <motion.div variants={stagger(0.06)} initial="hidden" animate="show">
           <motion.p
             variants={fadeUp}
-            className="font-label flex items-center gap-2 text-xs font-medium text-primary"
+            className="eyebrow"
           >
-            <span className="inline-block size-2 rounded-full bg-primary" />
             Atlas AI — Rules
           </motion.p>
           <motion.h1
@@ -75,7 +74,7 @@ export default function Rules() {
           </motion.h1>
           <motion.p
             variants={fadeUp}
-            className="mt-4 text-muted-foreground"
+            className="mt-4 text-[15px] leading-relaxed text-muted-foreground"
           >
             Simple, public, and short. Every mechanic is visible on the board —
             no hidden mechanics, no fine print.
@@ -99,7 +98,7 @@ export default function Rules() {
             <motion.li
               key={i}
               variants={fadeUp}
-              className="rounded-xl border border-border/70 bg-card p-5 sm:p-6"
+              className="rounded-2xl border border-border/50 bg-card p-5 shadow-apple sm:p-6"
             >
               <div className="flex gap-4">
                 <span className="font-display shrink-0 text-lg font-black text-primary/30">

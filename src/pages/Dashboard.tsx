@@ -46,13 +46,13 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background">
       <SiteHeader active="dashboard" />
 
-      <main className="mx-auto w-full max-w-5xl px-4 py-10">
+      <main className="mx-auto w-full max-w-5xl px-5 py-10">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="font-label text-xs text-muted-foreground">
+            <p className="eyebrow">
               Founder workspace
             </p>
-            <h1 className="type-display mt-1">
+            <h1 className="type-display mt-2">
               Welcome{user?.name ? `, ${user.name}` : ""}
             </h1>
           </div>
@@ -81,9 +81,9 @@ export default function Dashboard() {
             </div>
           ) : mine.length === 0 ? (
             <Card className="mt-3 border-dashed shadow-none">
-              <CardContent className="flex flex-col items-center gap-3 p-10 text-center">
-                <span className="text-4xl">🚀</span>
-                <p className="max-w-sm text-sm text-muted-foreground">
+              <CardContent className="flex flex-col items-center gap-4 p-10 text-center">
+                <span className="grid size-14 place-items-center rounded-2xl bg-primary/10 text-3xl">🚀</span>
+                <p className="max-w-sm text-[15px] leading-relaxed text-muted-foreground">
                   You haven't listed anything yet. Add your SaaS, repo
                   or token — then outbid everyone for #1.
                 </p>

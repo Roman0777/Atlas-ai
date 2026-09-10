@@ -126,7 +126,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
           </span>
         </Link>
         <div className="relative z-10 max-w-lg">
-          <p className="font-label mb-4 flex items-center gap-2 text-xs font-medium text-primary">
+          <p className="eyebrow mb-4">
             <span className="live-dot" />
             The board is live
           </p>
@@ -190,7 +190,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
               Atlas<span className="text-primary">.</span>
             </span>
           </Link>
-          <Card className="hairline min-w-[350px] rounded-xl pb-0 shadow-elevated">
+          <Card className="hairline min-w-[350px] rounded-2xl pb-0 shadow-apple-lg">
           {step === "signIn" ? (
             <>
               <CardHeader className="text-center">

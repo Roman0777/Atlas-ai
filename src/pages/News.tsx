@@ -155,8 +155,8 @@ export default function News() {
       <SiteHeader active="news" />
 
       {/* Hero */}
-      <section className="border-b border-border/60 bg-ledger">
-        <div className="mx-auto max-w-6xl px-4 py-10">
+      <section className="border-b border-border/50 bg-ledger grain">
+        <div className="mx-auto max-w-6xl px-5 py-12 sm:py-14">
           <motion.div
             variants={stagger(0.06, 0.05)}
             initial="hidden"
@@ -164,9 +164,8 @@ export default function News() {
           >
             <motion.p
               variants={fadeUp}
-              className="font-label flex items-center gap-2 text-xs font-medium text-primary"
+              className="eyebrow"
             >
-              <span className="inline-block size-2 rounded-full bg-primary" />
               The Atlas Dispatch
             </motion.p>
             <motion.h1 variants={fadeUp} className="type-display mt-3">
@@ -218,7 +217,7 @@ export default function News() {
         </div>
       </section>
 
-      <main className="mx-auto max-w-6xl px-4 py-8">
+      <main className="mx-auto max-w-6xl px-5 py-10">
         {/* Digest rail: top story per category */}
         {digest && digest.length > 0 && (
           <section className="mb-10">
@@ -230,7 +229,7 @@ export default function News() {
                   href={item.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group rounded-lg border border-border/60 bg-card p-3 transition hover:border-primary/50 hover:bg-accent/40"
+                  className="group rounded-2xl border border-border/50 bg-card p-4 shadow-apple transition-[box-shadow,border-color,transform] duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-apple-hover"
                 >
                   <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
                     {getCategory(item.category)?.emoji}{" "}
@@ -262,7 +261,7 @@ export default function News() {
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="rounded-lg border border-border/70 bg-card px-3 py-2 text-xs"
+            className="h-10 rounded-full border border-border/60 bg-card px-4 text-xs font-medium shadow-apple outline-none transition-colors hover:border-primary/40 focus-visible:border-primary/60 focus-visible:ring-2 focus-visible:ring-ring/40"
           >
             <option value="">All categories</option>
             {activeCategories.map((c) => (
@@ -274,7 +273,7 @@ export default function News() {
           <select
             value={sourceKey}
             onChange={(e) => setSourceKey(e.target.value)}
-            className="rounded-lg border border-border/70 bg-card px-3 py-2 text-xs"
+            className="h-10 rounded-full border border-border/60 bg-card px-4 text-xs font-medium shadow-apple outline-none transition-colors hover:border-primary/40 focus-visible:border-primary/60 focus-visible:ring-2 focus-visible:ring-ring/40"
           >
             <option value="">All sources</option>
             {Object.entries(stats?.bySource ?? {})
@@ -291,7 +290,7 @@ export default function News() {
         {filtered === undefined ? (
           <NewsSkeleton rows={6} />
         ) : filtered.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-border/60 p-12 text-center">
+          <div className="rounded-2xl border border-dashed border-border/60 bg-card/40 p-14 text-center shadow-apple">
             <Globe className="mx-auto size-8 text-muted-foreground" />
             <p className="mt-3 text-sm font-medium">No stories match.</p>
             <p className="mt-1 text-xs text-muted-foreground">
@@ -317,7 +316,7 @@ export default function News() {
                     href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex gap-4 rounded-xl border border-border/60 bg-card p-4 transition hover:border-primary/50 hover:bg-accent/40"
+                    className="group flex gap-4 rounded-2xl border border-border/50 bg-card p-4 shadow-apple transition-[box-shadow,border-color,transform] duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-apple-hover"
                   >
                     {item.imageUrl ? (
                       <img
@@ -379,7 +378,7 @@ export default function News() {
         id="newsletter"
         className="scroll-mt-20 border-t border-border/60 bg-card/40"
       >
-        <div className="mx-auto max-w-2xl px-4 py-16 text-center">
+        <div className="mx-auto max-w-2xl px-5 py-20 text-center">
           <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-primary/10">
             <Mail className="size-6 text-primary" />
           </div>
