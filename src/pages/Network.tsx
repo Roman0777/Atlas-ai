@@ -19,6 +19,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { toast } from "sonner";
 import { CATEGORIES, getCategory } from "@/lib/categories";
+import { CategoryIcon } from "@/components/category-icon";
 
 const STAGES = ["pre-seed", "seed", "series-a", "series-b", "growth"];
 const TYPES = [
@@ -120,7 +121,7 @@ export default function Network() {
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader active="network" />
-      <main className="mx-auto w-full max-w-6xl px-4 py-8">
+      <main className="mx-auto w-full max-w-6xl px-5 pt-20 pb-10">
         {authLoading ? (
           <div className="flex min-h-[40vh] items-center justify-center">
             <Loader2 className="size-6 animate-spin text-muted-foreground" />
@@ -245,7 +246,7 @@ export default function Network() {
                                 iSectors.includes(c.id) ? "border-primary bg-primary/10 text-primary" : "hover:bg-muted/50",
                               )}
                             >
-                              {c.emoji} {c.label}
+                              <CategoryIcon icon={c.icon} /> {c.label}
                             </button>
                           ))}
                         </div>
@@ -295,7 +296,7 @@ export default function Network() {
                   <select value={sector} onChange={(e) => setSector(e.target.value)} className="h-8 rounded-md border border-input bg-transparent px-2 text-xs">
                     <option value="">All sectors</option>
                     {CATEGORIES.map((c) => (
-                      <option key={c.id} value={c.id}>{c.emoji} {c.label}</option>
+                      <option key={c.id} value={c.id}>{c.label}</option>
                     ))}
                   </select>
                 </div>
@@ -321,8 +322,9 @@ export default function Network() {
                               </div>
                               <p className="line-clamp-2 text-xs text-muted-foreground">{s.tagline}</p>
                               <div className="flex flex-wrap gap-1.5 pt-1">
-                                <Badge variant="secondary" className="text-[10px]">
-                                  {getCategory(s.sector)?.emoji} {getCategory(s.sector)?.label}
+                                <Badge variant="secondary" className="gap-1 text-[10px]">
+                                  <CategoryIcon icon={getCategory(s.sector)?.icon} className="size-3" />
+                                  {getCategory(s.sector)?.label}
                                 </Badge>
                                 {s.askAmount ? (
                                   <Badge variant="secondary" className="text-[10px]">
@@ -360,8 +362,9 @@ export default function Network() {
                             <p className="line-clamp-2 text-xs text-muted-foreground">{iv.thesis}</p>
                             <div className="flex flex-wrap gap-1.5 pt-1">
                               {iv.sectors.slice(0, 3).map((s) => (
-                                <Badge key={s} variant="secondary" className="text-[10px]">
-                                  {getCategory(s)?.emoji} {getCategory(s)?.label}
+                                <Badge key={s} variant="secondary" className="gap-1 text-[10px]">
+                                  <CategoryIcon icon={getCategory(s)?.icon} className="size-3" />
+                                  {getCategory(s)?.label}
                                 </Badge>
                               ))}
                               {iv.checkMax ? (

@@ -20,10 +20,11 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { CATEGORIES, formatCents, getCategory } from "@/lib/categories";
+import { CategoryIcon } from "@/components/category-icon";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 import { useAuth } from "@/hooks/use-auth";
-import { Loader2 } from "lucide-react";
+import { Loader2, Lock, Rocket, Star, ThumbsDown } from "lucide-react";
 import { useAction, useQuery } from "convex/react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -74,9 +75,10 @@ export function ListingDetailDialog({
               <DialogHeader>
                 <div className="font-label flex items-center gap-2 text-[11px] text-muted-foreground">
                   {getCategory(detail.category) && (
-                    <>
-                      {getCategory(detail.category)!.emoji} {getCategory(detail.category)!.label}
-                    </>
+                    <span className="inline-flex items-center gap-1">
+                      <CategoryIcon icon={getCategory(detail.category)!.icon} className="size-3" />
+                      {getCategory(detail.category)!.label}
+                    </span>
                   )}
                   {detail.rank != null && (
                     <Badge variant="secondary" className="font-mono text-[10px]">
@@ -84,7 +86,9 @@ export function ListingDetailDialog({
                     </Badge>
                   )}
                   {detail.isLocked && (
-                    <Badge className="text-[10px]">🔒 locked #1</Badge>
+                    <Badge className="gap-1 text-[10px]">
+                      <Lock className="size-2.5" /> locked #1
+                    </Badge>
                   )}
                 </div>
                 <DialogTitle className="font-display text-left text-2xl font-black tracking-tight">
@@ -112,11 +116,15 @@ export function ListingDetailDialog({
                   <div className="font-label text-[9px] text-muted-foreground">banked</div>
                 </div>
                 <div className="rounded-lg border border-border/60 bg-card p-2.5">
-                  <div className="font-mono text-base font-bold tabular-nums">⭐ {detail.starCount}</div>
+                  <div className="flex items-center gap-1 font-mono text-base font-bold tabular-nums">
+                    <Star className="size-3.5" /> {detail.starCount}
+                  </div>
                   <div className="font-label text-[9px] text-muted-foreground">stars</div>
                 </div>
                 <div className="rounded-lg border border-border/60 bg-card p-2.5">
-                  <div className="font-mono text-base font-bold tabular-nums">👎 {detail.dislikeCount}</div>
+                  <div className="flex items-center gap-1 font-mono text-base font-bold tabular-nums">
+                    <ThumbsDown className="size-3.5" /> {detail.dislikeCount}
+                  </div>
                   <div className="font-label text-[9px] text-muted-foreground">hits taken</div>
                 </div>
                 <div className="rounded-lg border border-border/60 bg-card p-2.5">
@@ -153,7 +161,11 @@ export function ListingDetailDialog({
                               b.kind === "boost" ? "text-primary" : "text-destructive"
                             }
                           >
-                            {b.kind === "boost" ? "🚀" : "👎"}
+                            {b.kind === "boost" ? (
+                              <Rocket className="size-3.5" />
+                            ) : (
+                              <ThumbsDown className="size-3.5" />
+                            )}
                           </span>
                           <span className="truncate text-muted-foreground">
                             {b.userName} · {timeAgo(b.createdAt)}
@@ -172,14 +184,16 @@ export function ListingDetailDialog({
               <DialogFooter>
                 {isMine ? (
                   <Button onClick={() => setPayKind("boost")}>
-                    🚀 Boost{retakeCents != null ? ` for ${formatCents(retakeCents)}` : ""}
+                    <Rocket className="size-4" />
+                    Boost{retakeCents != null ? ` for ${formatCents(retakeCents)}` : ""}
                   </Button>
                 ) : (
                   <Button
                     variant="destructive"
                     onClick={() => setPayKind("dislike")}
                   >
-                    👎 Pay to down-rank
+                    <ThumbsDown className="size-4" />
+                    Pay to down-rank
                   </Button>
                 )}
                 <Button variant="outline" onClick={onClose}>
@@ -261,9 +275,13 @@ export function PayDialog({
         <DialogHeader>
           <DialogTitle>
             {kind === "boost" ? (
-              <>🚀 Boost “{listingTitle}”</>
+              <>
+                <Rocket className="inline size-4" /> Boost “{listingTitle}”
+              </>
             ) : (
-              <>👎 Pay to down-rank “{listingTitle}”</>
+              <>
+                <ThumbsDown className="inline size-4" /> Pay to down-rank “{listingTitle}”
+              </>
             )}
           </DialogTitle>
           <DialogDescription>
@@ -434,7 +452,10 @@ export function SubmitListingDialog({
               <SelectContent>
                 {CATEGORIES.map((c) => (
                   <SelectItem key={c.id} value={c.id}>
-                    {c.emoji} {c.label}
+                    <span className="inline-flex items-center gap-2">
+                      <CategoryIcon icon={c.icon} className="size-3.5" />
+                      {c.label}
+                    </span>
                   </SelectItem>
                 ))}
               </SelectContent>

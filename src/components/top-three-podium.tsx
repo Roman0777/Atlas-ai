@@ -6,6 +6,7 @@ import { AnimatedCents } from "@/components/animated-number";
 import { Button } from "@/components/ui/button";
 import { EASE } from "@/lib/motion";
 import { Crown, ExternalLink, Shield, Swords, Star, Lock } from "lucide-react";
+import { RankBadge } from "@/components/rank-badge";
 
 interface Listing {
   _id: string;
@@ -99,7 +100,6 @@ function Pedestal({
 }) {
   const fav = faviconUrl(listing.url);
   const isTop = rank === 1;
-  const medals = { 1: "🥇", 2: "🥈", 3: "🥉" };
   const glowColors = {
     1: "shadow-primary/20 border-primary/40",
     2: "shadow-muted-foreground/10 border-border/60",
@@ -124,9 +124,9 @@ function Pedestal({
       >
         {isTop && <GlowParticles />}
 
-        {/* Rank badge */}
+        {/* Rank badge — rendered medal, consistent across platforms */}
         <div className="mb-3 flex items-center justify-between">
-          <span className="text-2xl">{medals[rank]}</span>
+          <RankBadge rank={rank} size="lg" />
           {listing.isLocked && (
             <span className="flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
               <Lock className="size-3" /> Locked

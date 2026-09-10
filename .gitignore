@@ -8,3 +8,4 @@ src/convex/_generated
 .tsc-*.txt
 .lint-*.txt
 .build-*.txt
+.shots/

@@ -24,14 +24,19 @@ import { BoardSkeleton } from "@/components/skeleton";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { useMutation, useQuery } from "convex/react";
+import { CategoryIcon } from "@/components/category-icon";
 import {
   Crown,
   ExternalLink,
   Flame,
   HandCoins,
+  Lock,
+  Shield,
   Star,
+  Swords,
   ThumbsDown,
   TrendingUp,
+  Trophy,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
@@ -201,14 +206,14 @@ export default function Board() {
       if (!old) continue;
       // New top 3 entrant
       if (l.rank <= 3 && old.rank > 3) {
-        toast(`🔥 ${l.title} broke into the top 3!`, { duration: 4000 });
+        toast(`${l.title} broke into the top 3!`, { duration: 4000 });
       }
       // Big boost (total jumped by $500+)
       const diff = l.totalPaid - old.totalPaid;
       if (diff >= 50000) {
         // $500+ in cents
         toast(
-          `💰 ${l.title} boosted $${Math.round(diff / 100)} — now at $${Math.round(l.totalPaid / 100)}`,
+          `${l.title} boosted $${Math.round(diff / 100)} — now at $${Math.round(l.totalPaid / 100)}`,
           { duration: 5000 },
         );
       }
@@ -229,7 +234,7 @@ export default function Board() {
     prevLeaderRef.current = leaderId;
     if (prev && prev !== leaderId && board?.[0]) {
       fireConfetti();
-      toast.success(`👑 ${board[0].title} just took #1!`);
+      toast.success(`${board[0].title} just took #1!`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [leaderId]);
@@ -271,7 +276,7 @@ export default function Board() {
   useEffect(() => {
     const payment = params.get("payment");
     if (payment === "success") {
-      toast.success("Payment confirmed — the board just moved. 💸");
+      toast.success("Payment confirmed — the board just moved.");
     } else if (payment === "cancelled") {
       toast.info("Checkout cancelled — nothing was charged.");
     }
@@ -304,13 +309,13 @@ export default function Board() {
       <SiteHeader active="board" />
 
       {/* Hero strip */}
-      <section className="border-b border-border/60 bg-ledger">
-        <div className="mx-auto w-full max-w-6xl px-4 py-10">
-          <h1 className="type-display">
+      <section className="border-b border-border/20 bg-ledger">
+        <div className="mx-auto w-full max-w-6xl px-5 pt-20 pb-10">
+          <h1 className="type-display-lg">
             Top leaders. Be the next
             <span className="text-accent-orange"> to claim #1</span>.
           </h1>
-          <p className="mt-2 max-w-xl text-sm text-muted-foreground sm:text-base">
+          <p className="mt-3 max-w-xl text-base text-muted-foreground/60">
             Star what you love for free. Boost your own product with real
             dollars — or pay to drag a rival down. Ranks move live.
           </p>
@@ -325,7 +330,7 @@ export default function Board() {
         </div>
       </section>
 
-      <main className="mx-auto w-full max-w-6xl px-4 py-8">
+      <main className="mx-auto w-full max-w-6xl px-5 py-10">
         {/* Search + Range toggle */}
         <div className="mb-4 flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px] max-w-sm">
@@ -334,14 +339,14 @@ export default function Board() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search boards…"
-              className="w-full rounded-lg border border-border/70 bg-card px-3 py-2 pl-9 text-sm outline-none focus:border-primary/60 focus:ring-1 focus:ring-primary/30"
+              className="w-full rounded-xl border border-border/30 bg-card/60 px-4 py-2.5 pl-10 text-sm backdrop-blur-sm outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/10"
             />
             <svg className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
           </div>
           <div className="segmented-control">
             <button
               type="button"
-              aria-active={mode === "all"}
+              data-active={mode === "all"}
               className="relative"
               onClick={() => {
                 const p = new URLSearchParams(params);
@@ -360,7 +365,7 @@ export default function Board() {
             </button>
             <button
               type="button"
-              aria-active={mode === "today"}
+              data-active={mode === "today"}
               className="relative"
               onClick={() => {
                 const p = new URLSearchParams(params);
@@ -383,7 +388,7 @@ export default function Board() {
         {/* Category tabs — horizontal scroll strip */}
         <div className="no-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1 pb-4">
           <TabButton active={!category} onClick={() => setParams({})}>
-            🏆 All boards
+            <Trophy className="size-3.5" /> All boards
           </TabButton>
           {CATEGORIES.map((c) => (
             <TabButton
@@ -391,7 +396,7 @@ export default function Board() {
               active={category === c.id}
               onClick={() => setParams({ category: c.id })}
             >
-              {c.emoji} {c.label}
+              <CategoryIcon icon={c.icon} /> {c.label}
             </TabButton>
           ))}
         </div>
@@ -417,7 +422,7 @@ export default function Board() {
 
         <div className="grid gap-8 lg:grid-cols-[1fr_300px]">
           {/* Rankings */}
-          <div className="overflow-hidden rounded-xl border border-border/70 card-premium">
+          <div className="overflow-hidden rounded-2xl border border-border/30 bg-card/40 backdrop-blur-sm">
             {!board ? (
               <BoardSkeleton />
             ) : (filteredBoard?.length ?? 0) === 0 ? (
@@ -448,14 +453,14 @@ export default function Board() {
                       transition: { type: "spring", stiffness: 420, damping: 28 },
                     }}
                     className={cn(
-                      "flex items-center gap-3 p-4 transition-colors hover:bg-accent/40",
-                      listing.rank <= 3 && "bg-primary/[0.04]",
+                      "flex items-center gap-3 px-5 py-4 transition-colors hover:bg-accent/30",
+                      listing.rank <= 3 && "bg-primary/[0.03]",
                       listing.rank === 1 && "rank-lead",
                       listing.featured &&
                       listing.featuredUntil &&
                       now > 0 &&
                       listing.featuredUntil > now &&
-                      "border-l-2 border-l-amber-400 bg-amber-500/[0.04]",
+                      "border-l-2 border-l-amber-400 bg-amber-500/[0.03]",
                     )}
                   >
                     <RankBadge
@@ -475,8 +480,8 @@ export default function Board() {
                           {listing.title}
                         </button>
                         {listing.featured && listing.featuredUntil && now > 0 && listing.featuredUntil > now && (
-                          <Badge className="gap-1 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-[10px]">
-                            ⭐ Featured
+                          <Badge className="gap-1 bg-gradient-to-r from-amber-400 to-orange-500 text-[10px] text-white">
+                            <Star className="size-3 fill-current" /> Featured
                           </Badge>
                         )}
                         <a
@@ -489,8 +494,8 @@ export default function Board() {
                           <ExternalLink className="size-3" />
                         </a>
                         {!category && getCategory(listing.category) && (
-                          <Badge variant="secondary" className="text-[11px]">
-                            <span className="inline-flex size-3.5 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/8 text-[8px] leading-none">{getCategory(listing.category)!.emoji}</span>
+                          <Badge variant="secondary" className="gap-1 text-[11px]">
+                            <CategoryIcon category={listing.category} className="size-3" />
                             {getCategory(listing.category)!.label}
                           </Badge>
                         )}
@@ -604,7 +609,7 @@ export default function Board() {
             {leaders && leaders.length > 0 && (
               <div>
                 <h2 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-                  🔥 Trending boards
+                  <Flame className="size-4 text-orange-500" /> Trending boards
                 </h2>
                 <ul className="mt-2 space-y-1.5">
                   {leaders
@@ -621,7 +626,9 @@ export default function Board() {
                             className="flex w-full items-center justify-between rounded-lg border border-border/60 bg-card px-3 py-2.5 text-left text-xs transition hover:border-primary/40 hover:bg-accent/40"
                           >
                             <span className="flex items-center gap-2">
-                              <span className="inline-flex size-5 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/8 text-[10px] leading-none">{cat.emoji}</span>
+                              <span className="inline-flex size-6 shrink-0 items-center justify-center rounded-lg bg-primary/8 text-primary">
+                                <CategoryIcon icon={cat.icon} className="size-3.5" />
+                              </span>
                               <span className="font-medium truncate max-w-[140px]">{cat.label}</span>
                             </span>
                             <span className="font-mono font-semibold tabular-nums text-primary">
@@ -810,7 +817,12 @@ function SpotlightCard({
       <div className="min-w-0 flex-1">
         <p className="font-label flex items-center gap-2 text-[11px] font-medium text-primary">
           <span className="inline-block size-2 rounded-full bg-primary" />
-          #1 spot{listing.isLocked ? " · locked 🔒" : ""}
+          <span>#1 spot</span>
+          {listing.isLocked && (
+            <span className="inline-flex items-center gap-1">
+              · <Lock className="size-3" /> locked
+            </span>
+          )}
         </p>
         <button
           type="button"
@@ -833,16 +845,17 @@ function SpotlightCard({
           <div className="font-label text-[10px] text-muted-foreground">banked</div>
         </div>
         {isMine ? (
-          <Button size="sm" onClick={() => onPay(listing, "boost")}>
-            🛡 Defend #1
+          <Button size="sm" className="gap-1.5" onClick={() => onPay(listing, "boost")}>
+            <Shield className="size-3.5" /> Defend #1
           </Button>
         ) : (
           <Button
             size="sm"
             variant="destructive"
+            className="gap-1.5"
             onClick={() => onPay(listing, "dislike")}
           >
-            ⚔ Knock it down
+            <Swords className="size-3.5" /> Knock it down
           </Button>
         )}
       </div>

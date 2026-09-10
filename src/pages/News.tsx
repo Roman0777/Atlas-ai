@@ -8,6 +8,7 @@ import { getCategory } from "@/lib/categories";
 import { cn } from "@/lib/utils";
 import { useMutation, useQuery, useAction } from "convex/react";
 import { motion, useSpring, useTransform } from "framer-motion";
+import { CategoryIcon } from "@/components/category-icon";
 import {
   ArrowRight,
   CheckCircle2,
@@ -155,8 +156,8 @@ export default function News() {
       <SiteHeader active="news" />
 
       {/* Hero */}
-      <section className="border-b border-border/60 bg-ledger">
-        <div className="mx-auto max-w-6xl px-4 py-10">
+      <section className="border-b border-border/20 bg-ledger">
+        <div className="mx-auto max-w-6xl px-5 pt-20 pb-10">
           <motion.div
             variants={stagger(0.06, 0.05)}
             initial="hidden"
@@ -164,17 +165,17 @@ export default function News() {
           >
             <motion.p
               variants={fadeUp}
-              className="font-label flex items-center gap-2 text-xs font-medium text-primary"
+              className="font-label flex items-center gap-2 text-xs font-medium text-primary/70"
             >
-              <span className="inline-block size-2 rounded-full bg-primary" />
+              <span className="inline-block size-1.5 rounded-full bg-primary/60" />
               The Atlas Dispatch
             </motion.p>
-            <motion.h1 variants={fadeUp} className="type-display mt-3">
+            <motion.h1 variants={fadeUp} className="type-display-lg mt-4">
               Every story. One front page.
             </motion.h1>
             <motion.p
               variants={fadeUp}
-              className="mt-2 max-w-xl text-sm text-muted-foreground sm:text-base"
+              className="mt-3 max-w-xl text-base text-muted-foreground/60"
             >
               Publisher-owned RSS feeds — TechCrunch, HN, arXiv, Cloudflare,
               CoinDesk and more — synced into every Atlas category. Read the
@@ -218,7 +219,7 @@ export default function News() {
         </div>
       </section>
 
-      <main className="mx-auto max-w-6xl px-4 py-8">
+      <main className="mx-auto max-w-6xl px-5 py-10">
         {/* Digest rail: top story per category */}
         {digest && digest.length > 0 && (
           <section className="mb-10">
@@ -232,8 +233,8 @@ export default function News() {
                   rel="noopener noreferrer"
                   className="group rounded-lg border border-border/60 bg-card p-3 transition hover:border-primary/50 hover:bg-accent/40"
                 >
-                  <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-                    {getCategory(item.category)?.emoji}{" "}
+                  <p className="flex items-center gap-1 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+                    <CategoryIcon category={item.category} className="size-3" />
                     {getCategory(item.category)?.label ?? item.category}
                   </p>
                   <p className="mt-1 line-clamp-2 text-sm font-medium leading-snug group-hover:text-primary">
@@ -317,7 +318,7 @@ export default function News() {
                     href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex gap-4 rounded-xl border border-border/60 bg-card p-4 transition hover:border-primary/50 hover:bg-accent/40"
+                    className="group flex gap-4 rounded-2xl border border-border/30 bg-card/40 p-5 backdrop-blur-sm transition hover:border-primary/20 hover:bg-card/60 hover:shadow-card-hover"
                   >
                     {item.imageUrl ? (
                       <img
@@ -336,8 +337,9 @@ export default function News() {
                           {item.sourceName}
                         </span>
                         <span>·</span>
-                        <span>
-                          {cat?.emoji} {cat?.label ?? item.category}
+                        <span className="inline-flex items-center gap-1">
+                          <CategoryIcon icon={cat?.icon} className="size-3" />
+                          {cat?.label ?? item.category}
                         </span>
                         <span>·</span>
                         <span>{timeAgo(item.publishedAt)}</span>

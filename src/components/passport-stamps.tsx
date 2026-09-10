@@ -52,7 +52,7 @@ export function PassportStamps({
                   DAY {i + 1}
                 </span>
               ) : (
-                <span className="text-[10px] opacity-30">✕</span>
+                <span className="text-[10px] opacity-25">—</span>
               )}
             </div>
           );

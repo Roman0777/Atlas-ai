@@ -6,9 +6,12 @@ import { cn } from "@/lib/utils";
 import { useMutation, useQuery } from "convex/react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+  Coins,
   DollarSign,
   Gavel,
   MessageSquare,
+  PenLine,
+  Rocket,
   Sparkles,
   Trophy,
   User,
@@ -135,18 +138,30 @@ export function SalaryBidDialog({
                 <Sparkles className="size-4" />
                 How salary bidding works
               </h3>
-              <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
-                <li>
-                  💰 <strong>Lower salary = more attractive</strong> to the employer
+              <ul className="mt-3 space-y-2 text-xs text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <Coins className="mt-0.5 size-3.5 shrink-0 text-primary" />
+                  <span>
+                    <strong className="text-foreground">Lower salary = more attractive</strong>{" "}
+                    to the employer
+                  </span>
                 </li>
-                <li>
-                  🚀 <strong>Pay to boost</strong> your bid above others
+                <li className="flex items-start gap-2">
+                  <Rocket className="mt-0.5 size-3.5 shrink-0 text-primary" />
+                  <span>
+                    <strong className="text-foreground">Pay to boost</strong> your bid above
+                    others
+                  </span>
                 </li>
-                <li>
-                  🏆 <strong>Employers pick</strong> the best bidder
+                <li className="flex items-start gap-2">
+                  <Trophy className="mt-0.5 size-3.5 shrink-0 text-primary" />
+                  <span>
+                    <strong className="text-foreground">Employers pick</strong> the best bidder
+                  </span>
                 </li>
-                <li>
-                  📝 Add a pitch and skills to stand out
+                <li className="flex items-start gap-2">
+                  <PenLine className="mt-0.5 size-3.5 shrink-0 text-primary" />
+                  <span>Add a pitch and skills to stand out</span>
                 </li>
               </ul>
             </div>
@@ -276,8 +291,8 @@ export function SalaryBidDialog({
                             </span>
                           )}
                           {bid.isBoosted && (
-                            <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
-                              🚀 Boosted
+                            <span className="inline-flex items-center gap-1 rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
+                              <Rocket className="size-2.5" /> Boosted
                             </span>
                           )}
                         </div>

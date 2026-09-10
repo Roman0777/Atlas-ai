@@ -60,7 +60,7 @@ export default function Credits() {
     try {
       const res = await claim();
       if (res.claimed) {
-        toast.success(`+${res.amount} credits — ${res.streak}-day streak! 🔥`);
+        toast.success(`+${res.amount} credits — ${res.streak}-day streak!`);
       } else {
         toast.info("Already claimed today. Come back tomorrow!");
       }
@@ -93,7 +93,7 @@ export default function Credits() {
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader active="credits" />
-      <main className="mx-auto w-full max-w-6xl px-4 py-8">
+      <main className="mx-auto w-full max-w-6xl px-5 pt-20 pb-10">
         {authLoading || wallet === undefined ? (
           <div className="flex min-h-[40vh] items-center justify-center">
             <Loader2 className="size-6 animate-spin text-muted-foreground" />

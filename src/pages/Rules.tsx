@@ -58,7 +58,7 @@ const RULES = [
 export default function Rules() {
   return (
     <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-3xl px-4 py-16 sm:py-24">
+      <div className="mx-auto max-w-3xl px-5 py-20 sm:py-28">
         <motion.div variants={stagger(0.06)} initial="hidden" animate="show">
           <motion.p
             variants={fadeUp}

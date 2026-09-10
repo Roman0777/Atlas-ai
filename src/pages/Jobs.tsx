@@ -10,13 +10,18 @@ import { useAction, useQuery } from "convex/react";
 import {
   ArrowRight,
   Building2,
+  ClipboardList,
   Clock,
+  Coins,
   ExternalLink,
   Globe,
   Gavel,
   MapPin,
   RefreshCw,
+  Rocket,
   Search,
+  Target,
+  TrendingUp,
   Trophy,
   Zap,
 } from "lucide-react";
@@ -117,8 +122,8 @@ export default function Jobs() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero */}
-      <section className="border-b border-border/60 bg-ledger">
-        <div className="mx-auto max-w-6xl px-4 py-10">
+      <section className="border-b border-border/20 bg-ledger">
+        <div className="mx-auto max-w-6xl px-5 pt-20 pb-10">
           <motion.div
             variants={stagger(0.06, 0.05)}
             initial="hidden"
@@ -126,20 +131,20 @@ export default function Jobs() {
           >
             <motion.p
               variants={fadeUp}
-              className="font-label flex items-center gap-2 text-xs font-medium text-primary"
+              className="font-label flex items-center gap-2 text-xs font-medium text-primary/70"
             >
-              <span className="inline-block size-2 rounded-full bg-primary" />
+              <span className="inline-block size-1.5 rounded-full bg-primary/60" />
               Jobs & Careers
             </motion.p>
             <motion.h1
               variants={fadeUp}
-              className="type-display mt-3"
+              className="type-display-lg mt-4"
             >
               Find your next role.
             </motion.h1>
             <motion.p
               variants={fadeUp}
-              className="mt-2 max-w-xl text-sm text-muted-foreground sm:text-base"
+              className="mt-3 max-w-xl text-base text-muted-foreground/60"
             >
               Aggregated from LinkedIn, Indeed, Glassdoor, Remotive, and
               Arbeitnow. Updated automatically. Apply directly.
@@ -181,7 +186,7 @@ export default function Jobs() {
         </div>
       </section>
 
-      <main className="mx-auto max-w-6xl px-4 py-8">
+      <main className="mx-auto max-w-6xl px-5 py-10">
         {/* Search + filters */}
         <div className="mb-6 flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[240px] max-w-md">
@@ -196,15 +201,15 @@ export default function Jobs() {
 
           <div className="flex gap-1 rounded-lg border border-border/70 bg-card p-0.5">
             {[
-              { val: undefined, label: "All" },
-              { val: true, label: "🌍 Remote" },
+              { val: undefined, label: "All", icon: null },
+              { val: true, label: "Remote", icon: Globe },
             ].map((opt) => (
               <button
                 key={opt.label}
                 type="button"
                 onClick={() => setRemote(opt.val)}
                 className={cn(
-                  "rounded-md px-3 py-1.5 text-xs font-medium transition",
+                  "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition",
                   remote === opt.val
                     ? "bg-primary text-primary-foreground"
                     : "text-muted-foreground hover:text-foreground",
@@ -287,7 +292,7 @@ export default function Jobs() {
                   ease: EASE,
                 }}
                 whileHover={{ x: 4, transition: springSnappy }}
-                className="group rounded-xl border border-border/70 bg-card p-5 transition-colors hover:border-primary/40 hover:shadow-sm"
+                className="group rounded-2xl border border-border/30 bg-card/40 p-5 backdrop-blur-sm transition-colors hover:border-primary/20 hover:bg-card/60 hover:shadow-card-hover"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
@@ -296,8 +301,8 @@ export default function Jobs() {
                         {job.title}
                       </h3>
                       {job.isRemote && (
-                        <Badge variant="secondary" className="text-[10px]">
-                          🌍 Remote
+                        <Badge variant="secondary" className="gap-1 text-[10px]">
+                          <Globe className="size-3" /> Remote
                         </Badge>
                       )}
                       <Badge
@@ -435,9 +440,15 @@ export default function Jobs() {
                 employers pick the best candidate. Pay to boost your bid above others.
               </p>
               <div className="mt-4 flex flex-wrap justify-center gap-2 text-xs text-muted-foreground">
-                <span className="rounded-full bg-secondary px-3 py-1">💰 Free to bid</span>
-                <span className="rounded-full bg-secondary px-3 py-1">🚀 $1 to boost</span>
-                <span className="rounded-full bg-secondary px-3 py-1">🏆 Lowest bid wins</span>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1">
+                  <Coins className="size-3.5" /> Free to bid
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1">
+                  <Rocket className="size-3.5" /> $1 to boost
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1">
+                  <Trophy className="size-3.5" /> Lowest bid wins
+                </span>
               </div>
             </div>
             {/* For employers */}
@@ -451,9 +462,15 @@ export default function Jobs() {
                 Pick the one that fits. Pay $2 to list, $5 to boost visibility.
               </p>
               <div className="mt-4 flex flex-wrap justify-center gap-2 text-xs text-muted-foreground">
-                <span className="rounded-full bg-secondary px-3 py-1">📋 $2 to list</span>
-                <span className="rounded-full bg-secondary px-3 py-1">📈 $5 to boost</span>
-                <span className="rounded-full bg-secondary px-3 py-1">🎯 Pick your hire</span>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1">
+                  <ClipboardList className="size-3.5" /> $2 to list
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1">
+                  <TrendingUp className="size-3.5" /> $5 to boost
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1">
+                  <Target className="size-3.5" /> Pick your hire
+                </span>
               </div>
             </div>
           </div>

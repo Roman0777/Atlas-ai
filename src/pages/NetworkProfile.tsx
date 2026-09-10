@@ -19,6 +19,7 @@ import { useState } from "react";
 import { Link, useParams } from "react-router";
 import { toast } from "sonner";
 import { getCategory } from "@/lib/categories";
+import { CategoryIcon } from "@/components/category-icon";
 
 export default function NetworkProfile({
   kind,
@@ -131,8 +132,8 @@ export default function NetworkProfile({
                   <Badge variant="outline">{startup.stage}</Badge>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
-                  <Badge variant="secondary" className="text-[10px]">
-                    {getCategory(startup.sector)?.emoji}{" "}
+                  <Badge variant="secondary" className="gap-1 text-[10px]">
+                    <CategoryIcon icon={getCategory(startup.sector)?.icon} className="size-3" />
                     {getCategory(startup.sector)?.label}
                   </Badge>
                   {startup.askAmount ? (
@@ -231,8 +232,9 @@ export default function NetworkProfile({
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {investor.sectors.map((s) => (
-                    <Badge key={s} variant="secondary" className="text-[10px]">
-                      {getCategory(s)?.emoji} {getCategory(s)?.label}
+                    <Badge key={s} variant="secondary" className="gap-1 text-[10px]">
+                      <CategoryIcon icon={getCategory(s)?.icon} className="size-3" />
+                      {getCategory(s)?.label}
                     </Badge>
                   ))}
                 </div>

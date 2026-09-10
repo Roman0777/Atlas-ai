@@ -6,7 +6,10 @@ import { motion } from "framer-motion";
 import { AnimatedCents } from "@/components/animated-number";
 import { Button } from "@/components/ui/button";
 import { Crown, Lock, Star, Shield, Swords } from "lucide-react";
+import { CategoryIcon } from "@/components/category-icon";
+import { RankBadge } from "@/components/rank-badge";
 import { EASE } from "@/lib/motion";
+import { getCategory } from "@/lib/categories";
 import { cn } from "@/lib/utils";
 
 const R = 1; // globe radius (scene units)
@@ -542,7 +545,6 @@ interface Listing {
   ownerName?: string;
 }
 
-const MEDALS = ["🥇", "🥈", "🥉"];
 const PIN_ANGLES: [number, number][] = [
   [20, -30],
   [-15, 100],
@@ -652,20 +654,37 @@ function PinnedCard({
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, delay: 0.3 + index * 0.15, ease: EASE }}
         className={cn(
-          "w-[175px] cursor-grab active:cursor-grabbing rounded-xl border bg-card/95 p-3 shadow-lg backdrop-blur-sm",
-          isTop ? "border-primary/40 shadow-primary/10" : "border-border/60",
+          "group relative w-[208px] cursor-grab rounded-2xl border bg-card/95 p-3.5 pt-4 shadow-xl backdrop-blur-md",
+          "transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:shadow-2xl",
+          "active:cursor-grabbing",
+          isTop
+            ? "border-primary/45 shadow-primary/15"
+            : "border-border/60 hover:border-primary/25",
         )}
       >
-        <div className="flex items-center gap-1.5">
-          <span className="text-lg">{MEDALS[index]}</span>
-          {listing.isLocked && <Lock className="size-3 text-primary/60" />}
+        {/* Rendered medal — replaces the platform-dependent emoji */}
+        <div className="absolute -left-2 -top-2.5 drop-shadow-sm">
+          <RankBadge rank={index + 1} size="md" />
         </div>
-        <div className="mt-1 flex items-center gap-1.5">
+
+        {/* Header: category glyph + locked state */}
+        <div className="flex items-center justify-between gap-2">
+          <span className="inline-flex items-center gap-1 rounded-full bg-primary/8 px-2 py-0.5 text-[10px] font-medium text-primary/90">
+            <CategoryIcon category={listing.category} className="size-3" />
+            <span className="max-w-[104px] truncate">
+              {getCategory(listing.category)?.label ?? "Other"}
+            </span>
+          </span>
+          {listing.isLocked && <Lock className="size-3 shrink-0 text-muted-foreground" />}
+        </div>
+
+        {/* Title — two lines instead of a single truncated line */}
+        <div className="mt-2 flex items-start gap-1.5">
           {fav && (
             <img
               src={fav}
               alt=""
-              className="size-3.5 shrink-0 rounded-sm"
+              className="mt-0.5 size-4 shrink-0 rounded"
               loading="lazy"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = "none";
@@ -675,31 +694,35 @@ function PinnedCard({
           <button
             type="button"
             onClick={() => onDetail(listing._id)}
-            className="truncate text-left text-xs font-bold hover:text-primary"
+            className="line-clamp-2 text-left text-[13px] font-semibold leading-snug tracking-tight hover:text-primary"
           >
             {listing.title}
           </button>
         </div>
-        <div className="mt-2 flex items-center justify-between">
+
+        {/* Metric row */}
+        <div className="mt-2.5 flex items-baseline justify-between border-t border-border/50 pt-2">
           <AnimatedCents
             value={listing.totalPaid}
-            className={cn("type-data text-sm", isTop ? "text-primary" : "text-foreground")}
+            className={cn("type-data text-base font-semibold", isTop ? "text-primary" : "text-foreground")}
           />
-          <span className="flex items-center gap-0.5 text-[10px] text-muted-foreground">
-            <Star className="size-2.5 fill-primary/30 text-primary/50" />
+          <span className="flex items-center gap-1 text-[10px] font-semibold text-muted-foreground">
+            <Star className="size-2.5 fill-[#D9B36A] text-[#B08D1E]" />
             {listing.starCount}
           </span>
         </div>
-        <div className="mt-2">
+
+        {/* Action — single calm primary for defense, quiet outline for offence */}
+        <div className="mt-2.5">
           {isMine ? (
-            <Button size="sm" className="w-full gap-1 text-[10px]" onClick={() => onPay(listing, "boost")}>
+            <Button size="sm" className="h-7 w-full gap-1 text-[10px]" onClick={() => onPay(listing, "boost")}>
               <Shield className="size-2.5" /> Defend
             </Button>
           ) : (
             <Button
               size="sm"
-              variant="destructive"
-              className="w-full gap-1 text-[10px]"
+              variant="outline"
+              className="h-7 w-full gap-1 text-[10px] hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive"
               onClick={() => onPay(listing, "dislike")}
             >
               <Swords className="size-2.5" /> Knock down
