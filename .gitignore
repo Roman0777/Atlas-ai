@@ -9,3 +9,5 @@ src/convex/_generated
 .lint-*.txt
 .build-*.txt
 .shots/
+.vercel
+.env*

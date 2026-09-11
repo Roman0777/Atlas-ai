@@ -13,7 +13,7 @@ import { Link, useNavigate } from "react-router";
 export function SiteHeader({
   active,
 }: {
-  active?: "board" | "dashboard" | "credits" | "network" | "news";
+  active?: "board" | "dashboard" | "credits" | "network" | "news" | "premium";
 }) {
   const { isAuthenticated, signOut } = useAuth();
   const navigate = useNavigate();

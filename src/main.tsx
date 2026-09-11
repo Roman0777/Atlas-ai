@@ -25,6 +25,8 @@ const News = lazy(() => import("./pages/News.tsx"));
 const Credits = lazy(() => import("./pages/Credits.tsx"));
 const Network = lazy(() => import("./pages/Network.tsx"));
 const NetworkProfile = lazy(() => import("./pages/NetworkProfile.tsx"));
+const Premium = lazy(() => import("./pages/Premium.tsx"));
+const Admin = lazy(() => import("./pages/Admin.tsx"));
 
 // Simple loading fallback for route transitions
 function RouteLoading() {
@@ -156,6 +158,8 @@ function AnimatedRoutes() {
                 </RequireAuth>
               }
             />
+            <Route path="/premium" element={<Premium />} />
+            <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

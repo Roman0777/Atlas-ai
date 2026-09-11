@@ -16,6 +16,22 @@ export const roleValidator = v.union(
 );
 export type Role = Infer<typeof roleValidator>;
 
+export const subscriptionPlanValidator = v.union(
+  v.literal("premium"),
+  v.literal("pro"),
+);
+export type SubscriptionPlan = Infer<typeof subscriptionPlanValidator>;
+
+export const subscriptionStatusValidator = v.union(
+  v.literal("pending"),
+  v.literal("active"),
+  v.literal("on_hold"),
+  v.literal("cancelled"),
+  v.literal("expired"),
+  v.literal("failed"),
+);
+export type SubscriptionStatus = Infer<typeof subscriptionStatusValidator>;
+
 const schema = defineSchema(
   {
     // default auth tables using convex auth.
@@ -30,8 +46,12 @@ const schema = defineSchema(
       isAnonymous: v.optional(v.boolean()), // is the user anonymous. do not remove
 
       role: v.optional(roleValidator), // role of the user. do not remove
-
-      // Referral program: each successful referral adds rank credit.
+      subscriptionPlan: v.optional(subscriptionPlanValidator),
+      subscriptionStatus: v.optional(subscriptionStatusValidator),
+      dodoCustomerId: v.optional(v.string()),
+      dodoSubscriptionId: v.optional(v.string()),
+      subscriptionCurrentPeriodEnd: v.optional(v.number()),
+      subscriptionUpdatedAt: v.optional(v.number()),
       referralCode: v.optional(v.string()),
       referralCount: v.optional(v.number()),
 

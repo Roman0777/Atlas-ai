@@ -10,10 +10,18 @@ export function useAuth() {
   // Derive isLoading directly from the dependencies instead of managing separate state
   const isLoading = isAuthLoading || user === undefined;
 
+  const role = user?.role ?? "user";
+  const isAdmin = role === "admin";
+  const isPremium =
+    isAdmin || (role === "member" && user?.subscriptionStatus === "active");
+
   return {
     isLoading,
     isAuthenticated,
     user,
+    role,
+    isAdmin,
+    isPremium,
     signIn,
     signOut,
   };

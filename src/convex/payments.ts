@@ -6,6 +6,7 @@ import { v } from "convex/values";
 import { action } from "./_generated/server";
 import { api, internal } from "./_generated/api";
 import { LISTING_FEE_CENTS, MAX_BID_CENTS, MIN_BID_CENTS } from "./listings";
+import { subscriptionPlanValidator } from "./schema";
 
 function dodoClient(): DodoPayments {
   const key = process.env.DODO_PAYMENTS_API_KEY;
@@ -23,11 +24,19 @@ function dodoClient(): DodoPayments {
   });
 }
 
-function dodoProductId(): string {
-  const id = process.env.DODO_PRODUCT_ID;
+function dodoProductId(kind: "board" | "subscription", plan?: string): string {
+  const envName =
+    kind === "subscription"
+      ? plan === "premium"
+        ? "DODO_PREMIUM_PRODUCT_ID"
+        : "DODO_PRO_PRODUCT_ID"
+      : "DODO_PRODUCT_ID";
+  const id = process.env[envName];
   if (!id) {
     throw new Error(
-      "Payments aren't configured yet (missing DODO_PRODUCT_ID). Create a pay-what-you-want product in your Dodo dashboard and add its ID in the Keys tab.",
+      kind === "subscription"
+        ? `Subscriptions aren't configured yet (missing ${envName}). Create the recurring product in Dodo and add its ID in the Keys tab.`
+        : "Payments aren't configured yet (missing DODO_PRODUCT_ID). Create a pay-what-you-want product in your Dodo dashboard and add its ID in the Keys tab.",
     );
   }
   return id;
@@ -47,26 +56,36 @@ export const createCheckout = action({
       v.literal("boost"),
       v.literal("dislike"),
       v.literal("listing"),
+      v.literal("subscription"),
     ),
     origin: v.string(),
     title: v.optional(v.string()),
     url: v.optional(v.string()),
     tagline: v.optional(v.string()),
     category: v.optional(v.string()),
+    plan: v.optional(subscriptionPlanValidator),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Sign in first.");
 
     if (
-      !Number.isInteger(args.amountCents) ||
-      args.amountCents < MIN_BID_CENTS ||
-      args.amountCents > MAX_BID_CENTS ||
-      args.amountCents % 100 !== 0
+      args.kind !== "subscription" &&
+      (!Number.isInteger(args.amountCents) ||
+        args.amountCents < MIN_BID_CENTS ||
+        args.amountCents > MAX_BID_CENTS ||
+        args.amountCents % 100 !== 0)
     ) {
       throw new Error(
         `Whole US dollars only, $${MIN_BID_CENTS / 100} minimum, $${MAX_BID_CENTS / 100} maximum.`,
       );
+    }
+    if (args.kind === "subscription") {
+      if (!args.plan) throw new Error("Plan required for subscription.");
+      const expectedAmount = args.plan === "premium" ? 900 : 2900;
+      if (args.amountCents !== expectedAmount) {
+        throw new Error("Subscription price does not match the selected plan.");
+      }
     }
     const origin = args.origin.startsWith("http") ? args.origin : "";
     if (!origin) throw new Error("Invalid app origin.");
@@ -76,7 +95,16 @@ export const createCheckout = action({
 
     let metadata: Record<string, string>;
 
-    if (args.kind === "listing") {
+    if (args.kind === "subscription") {
+      // Subscription: assign role based on plan (premium/pro)
+      if (!args.plan) throw new Error("Plan required for subscription.");
+      metadata = {
+        bidKind: "subscription",
+        userId,
+        amountCents: String(args.amountCents),
+        plan: args.plan,
+      };
+    } else if (args.kind === "listing") {
       // $2 flat listing fee; the listing itself is created by the webhook
       // once the payment clears (idempotent on URL).
       if (args.amountCents !== LISTING_FEE_CENTS) {
@@ -125,9 +153,14 @@ export const createCheckout = action({
     const session = await client.checkoutSessions.create({
       product_cart: [
         {
-          product_id: dodoProductId(),
+          product_id: dodoProductId(
+            args.kind === "subscription" ? "subscription" : "board",
+            args.plan,
+          ),
           quantity: 1,
-          amount: args.amountCents,
+          ...(args.kind === "subscription"
+            ? {}
+            : { amount: args.amountCents }),
         },
       ],
       customer: {
@@ -135,7 +168,8 @@ export const createCheckout = action({
         name: user?.name ?? "Anonymous",
       },
       metadata,
-      return_url: `${origin}/board?payment=success`,
+      return_url: `${origin}/${args.kind === "subscription" ? "premium" : "board"}?payment=success`,
+      cancel_url: `${origin}/${args.kind === "subscription" ? "premium" : "board"}?payment=cancelled`,
     });
 
     if (!session.checkout_url) throw new Error("Could not start checkout. Try again.");

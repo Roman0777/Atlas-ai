@@ -49,9 +49,47 @@ async function verifyDodoSignature(
   return providedSignatures.some((s) => s === computed);
 }
 
-// Dodo calls this once a payment succeeds; only then does the leaderboard
-// move (boost) or drop (paid dislike). Standard Webhooks spec headers:
-// webhook-id, webhook-timestamp, webhook-signature.
+type DodoEventData = {
+  payment_id?: string;
+  subscription_id?: string;
+  customer_id?: string;
+  next_billing_date?: string;
+  status?: string;
+  metadata?: Record<string, string>;
+};
+
+type DodoEvent = {
+  type?: string;
+  data?: DodoEventData;
+};
+
+function isSubscriptionPlan(value: string | undefined): value is "premium" | "pro" {
+  return value === "premium" || value === "pro";
+}
+
+function subscriptionStatusForEvent(
+  type: string,
+  dataStatus?: string,
+): "active" | "on_hold" | "cancelled" | "expired" | "failed" | null {
+  if (type === "subscription.active" || type === "subscription.renewed") {
+    return "active";
+  }
+  if (type === "subscription.on_hold") return "on_hold";
+  if (type === "subscription.cancelled") return "cancelled";
+  if (type === "subscription.expired") return "expired";
+  if (type === "subscription.failed") return "failed";
+  if (type === "subscription.updated" || type === "subscription.plan_changed") {
+    if (dataStatus === "active") return "active";
+    if (dataStatus === "on_hold") return "on_hold";
+    if (dataStatus === "cancelled") return "cancelled";
+    if (dataStatus === "expired") return "expired";
+    if (dataStatus === "failed") return "failed";
+  }
+  return null;
+}
+
+// Dodo calls this endpoint for board payments and subscription lifecycle events.
+// Access changes only after a verified, signed webhook.
 http.route({
   path: "/webhooks/dodo",
   method: "POST",
@@ -83,19 +121,17 @@ http.route({
       return new Response("Invalid signature", { status: 401 });
     }
 
-    let event: {
-      type?: string;
-      data?: { payment_id?: string; metadata?: Record<string, string> };
-    };
+    let event: DodoEvent;
     try {
-      event = JSON.parse(body);
+      event = JSON.parse(body) as DodoEvent;
     } catch {
       return new Response("Bad payload", { status: 400 });
     }
 
-    if (event.type === "payment.succeeded") {
-      const meta = event.data?.metadata ?? {};
+    const data = event.data ?? {};
+    const meta = data.metadata ?? {};
 
+    if (event.type === "payment.succeeded") {
       // $2 listing fee: create the listing (idempotent on URL).
       if (meta.bidKind === "listing" && meta.title && meta.url && meta.category) {
         try {
@@ -113,17 +149,58 @@ http.route({
         return new Response(null, { status: 200 });
       }
 
-      const bidId = meta.bidId;
-      if (bidId) {
+      // A subscription can emit payment.succeeded before subscription.active.
+      // Grant access provisionally; lifecycle events below keep it synchronized.
+      if (
+        meta.bidKind === "subscription" &&
+        meta.userId &&
+        isSubscriptionPlan(meta.plan)
+      ) {
+        try {
+          await ctx.runMutation(internal.users.syncSubscription, {
+            userId: meta.userId as Id<"users">,
+            plan: meta.plan as "premium" | "pro",
+            status: "active",
+            subscriptionId: data.subscription_id,
+            customerId: data.customer_id,
+          });
+        } catch (err) {
+          console.error("Failed to apply subscription payment:", err);
+          return new Response("Apply failed", { status: 500 });
+        }
+        return new Response(null, { status: 200 });
+      }
+
+      // Boost / dislike: apply the paid bid.
+      if (meta.bidId) {
         try {
           await ctx.runMutation(internal.listings.applyPaidBid, {
-            bidId: bidId as Id<"bids">,
-            paymentId: event.data?.payment_id,
+            bidId: meta.bidId as Id<"bids">,
+            paymentId: data.payment_id,
           });
         } catch (err) {
           console.error("Failed to apply paid bid:", err);
           return new Response("Apply failed", { status: 500 });
         }
+      }
+    }
+
+    const status = subscriptionStatusForEvent(event.type ?? "", data.status);
+    if (status && meta.userId && isSubscriptionPlan(meta.plan)) {
+      try {
+        await ctx.runMutation(internal.users.syncSubscription, {
+          userId: meta.userId as Id<"users">,
+          plan: meta.plan as "premium" | "pro",
+          status,
+          subscriptionId: data.subscription_id,
+          customerId: data.customer_id,
+          currentPeriodEnd: data.next_billing_date
+            ? Date.parse(data.next_billing_date)
+            : undefined,
+        });
+      } catch (err) {
+        console.error("Failed to sync subscription lifecycle:", err);
+        return new Response("Apply failed", { status: 500 });
       }
     }
 
