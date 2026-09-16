@@ -6,6 +6,7 @@ import { TiltCard } from "@/components/tilt-card";
 import { CompassRose } from "@/components/compass-rose";
 import { BoardingPass } from "@/components/boarding-pass";
 import { CoordinatesTicker } from "@/components/coordinates-ticker";
+import { CategoryIcon } from "@/components/category-icon";
 import { api } from "@/convex/_generated/api";
 import { REFERRAL_CREDIT_CENTS, STAR_CREDIT_CENTS } from "@/lib/categories";
 import { CATEGORIES, formatCents } from "@/lib/categories";
@@ -112,7 +113,7 @@ function CategoryLeaderCards({ filter }: { filter: string }) {
               className="group flex items-center gap-3 rounded-xl border border-border/60 bg-card px-4 py-3 transition-all hover:border-primary/40 hover:shadow-card-hover"
             >
               <span className="grid size-10 shrink-0 place-items-center overflow-hidden rounded-full bg-primary/8 text-sm leading-none transition-colors group-hover:bg-primary/15">
-                {c.emoji}
+                <CategoryIcon category={c.id} className="size-4" />
               </span>
               <div className="min-w-0 flex-1">
                 <span className="block text-[13px] font-semibold leading-snug">
@@ -622,7 +623,7 @@ export default function Landing() {
               className="font-label flex items-center gap-2.5 px-4 text-[11px] text-muted-foreground"
             >
               <span className="grid size-6 shrink-0 place-items-center overflow-hidden rounded-full border border-border/40 bg-card text-[10px] leading-none shadow-sm">
-                {c.emoji}
+                <CategoryIcon category={c.id} className="size-3.5" />
               </span>
               {c.label}
               <span className="text-primary/70">·</span>
@@ -697,7 +698,6 @@ export default function Landing() {
           {[
             {
               icon: <Star className="size-5" />,
-              emoji: "⭐",
               kicker: "Free",
               title: "Star it",
               mono: "+$0.10 credit per star",
@@ -705,7 +705,6 @@ export default function Landing() {
             },
             {
               icon: <Rocket className="size-5" />,
-              emoji: "🚀",
               kicker: "Paid",
               title: "Boost yours",
               mono: "5× the leader banks 3h of lock",
@@ -713,7 +712,6 @@ export default function Landing() {
             },
             {
               icon: <ThumbsDown className="size-5" />,
-              emoji: "👎",
               kicker: "Paid",
               title: "Down-rank rivals",
               mono: "2× the target's banked total",
@@ -729,7 +727,7 @@ export default function Landing() {
             >
               <div className="flex items-center justify-between">
                 <span className="grid size-11 place-items-center overflow-hidden rounded-full border border-border/60 bg-primary/8 text-xl leading-none transition-colors group-hover:border-primary/30 group-hover:bg-primary/15">
-                  {f.emoji}
+                  {f.icon}
                 </span>
                 <span
                   className={cn(
@@ -881,19 +879,19 @@ export default function Landing() {
               className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4"
             >
               {[
-                { id: "x-profiles", emoji: "𝕏", label: "X / Twitter" },
-                { id: "yt-channels", emoji: "📺", label: "YouTube" },
-                { id: "instagram", emoji: "📸", label: "Instagram" },
-                { id: "tiktok", emoji: "🎵", label: "TikTok" },
-                { id: "linkedin", emoji: "💼", label: "LinkedIn" },
-                { id: "twitch", emoji: "🎮", label: "Twitch" },
-                { id: "newsletters", emoji: "✉️", label: "Newsletters" },
-                { id: "games", emoji: "🕹️", label: "Games" },
-                { id: "audio", emoji: "🎙️", label: "Podcasts" },
-                { id: "design", emoji: "🎨", label: "Design" },
-                { id: "writing", emoji: "✍️", label: "Writing" },
-                { id: "ai-media", emoji: "✨", label: "AI Media" },
-                { id: "realestate", emoji: "🏠", label: "Real Estate" },
+                { id: "x-profiles", label: "X / Twitter" },
+                { id: "yt-channels", label: "YouTube" },
+                { id: "instagram", label: "Instagram" },
+                { id: "tiktok", label: "TikTok" },
+                { id: "linkedin", label: "LinkedIn" },
+                { id: "twitch", label: "Twitch" },
+                { id: "newsletters", label: "Newsletters" },
+                { id: "games", label: "Games" },
+                { id: "audio", label: "Podcasts" },
+                { id: "design", label: "Design" },
+                { id: "writing", label: "Writing" },
+                { id: "ai-media", label: "AI Media" },
+                { id: "realestate", label: "Real Estate" },
               ].map((s) => (
                 <motion.div key={s.id} variants={fadeUp} whileHover={{ y: -3, transition: springSnappy }}>
                   <Link
@@ -901,7 +899,9 @@ export default function Landing() {
                     onPointerMove={trackSpotlight}
                     className="spotlight group flex items-center gap-3 rounded-xl border border-border/70 bg-card p-4 transition-all hover:border-primary/50 hover:shadow-card-hover glow-hover"
                   >
-                    <span className="inline-flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/8 text-sm leading-none">{s.emoji}</span>
+                    <span className="inline-flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/8 text-sm leading-none">
+                      <CategoryIcon category={s.id} className="size-4" />
+                    </span>
                     <span className="text-[13px] font-semibold">{s.label}</span>
                   </Link>
                 </motion.div>
