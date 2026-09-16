@@ -4,24 +4,19 @@ pages_build_output_dir = "./dist"
 
 # Build command: npm run build
 # Output directory: dist/
-# Node version: 20 (default)
+
+# ── Cloudflare Pages Environment Variables ──
+# Set these in Cloudflare Dashboard > Pages > Environment variables
+# or via `wrangler pages deployment set-env`
 
 [vars]
-# Non-sensitive public variables go here
-# VITE_APP_NAME = "Atlas AI"
+# Public variables (non-sensitive)
+VITE_CONVEX_URL = "https://oceanic-kangaroo-487.convex.cloud"
 
-# Secrets — set via `wrangler pages secret put <KEY>` or Cloudflare dashboard:
-# VITE_CONVEX_URL
-# CONVEX_SITE_URL (set to your Cloudflare Pages URL)
-# DODO_PAYMENTS_API_KEY
-# DODO_WEBHOOK_SECRET
-# JWT_PRIVATE_KEY
-# JWT_PUBLIC_KEY
-# JWKS
+# ── Secrets (set via Cloudflare Dashboard or wrangler) ──
+# None required for frontend — all secrets live on Convex Cloud
 
-# Environment: production (preview uses --env flag)
-[env.production]
-# vars = { ENVIRONMENT = "production" }
-
+# ── Preview Environment ──
 [env.preview]
-# vars = { ENVIRONMENT = "preview" }
+[env.preview.vars]
+VITE_CONVEX_URL = "https://oceanic-kangaroo-487.convex.cloud"
