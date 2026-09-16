@@ -1,10 +1,12 @@
 name = "atlas-ai"
 compatibility_date = "2024-09-01"
 
-# ── Cloudflare Pages ──
-pages_build_output_dir = "./dist"
+# Static assets configuration
+[assets]
+directory = "./dist"
+not_found_handling = "single-page-application"
 
-# Environment variables for Pages
+# Environment variables
 [vars]
 VITE_CONVEX_URL = "https://oceanic-kangaroo-487.convex.cloud"
 
