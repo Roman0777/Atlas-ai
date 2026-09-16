@@ -1,22 +1,14 @@
 name = "atlas-ai"
 compatibility_date = "2024-09-01"
+
+# ── Cloudflare Pages ──
 pages_build_output_dir = "./dist"
 
-# Build command: npm run build
-# Output directory: dist/
-
-# ── Cloudflare Pages Environment Variables ──
-# Set these in Cloudflare Dashboard > Pages > Environment variables
-# or via `wrangler pages deployment set-env`
-
+# Environment variables for Pages
 [vars]
-# Public variables (non-sensitive)
 VITE_CONVEX_URL = "https://oceanic-kangaroo-487.convex.cloud"
 
-# ── Secrets (set via Cloudflare Dashboard or wrangler) ──
-# None required for frontend — all secrets live on Convex Cloud
-
-# ── Preview Environment ──
+# Preview environment
 [env.preview]
 [env.preview.vars]
 VITE_CONVEX_URL = "https://oceanic-kangaroo-487.convex.cloud"
