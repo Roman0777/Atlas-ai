@@ -2,7 +2,6 @@
 .env.local
 node_modules
 dist
-src/convex/_generated
 *.log
 .lint-report*.txt
 .tsc-*.txt
